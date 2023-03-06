@@ -1017,16 +1017,6 @@ dnsmasq_start() {
 		config_list_foreach "$cfg" rebind_domain append_rebind_domain
 	}
 
-	if [ "$mode" != "wifiapmode" -a "$mode" != "lanapmode" -a "$mode" != "whc_re" ]; then
-	[ -f "/www/xiaoqiang/diagnosis/index.html" ] && {
-		# network troubleshoot intercept
-		local intercept="$(uci -q get network.lan.ipaddr)"
-		[ -n "$intercept" ] && {
-			xappend "--intercept-ip-address=$intercept"
-			[ -f "/etc/intercept_wlist" ] && xappend "--intercept-white-list=/etc/intercept_wlist"
-		}
-	}
-	fi
 
 	config_get_bool dnssec "$cfg" dnssec 0
 	[ "$dnssec" -gt 0 ] && {
@@ -1138,8 +1128,8 @@ dnsmasq_start() {
 
 	#setup router domain
 	mkdir -p /tmp/hosts/ && {
-		echo "${lanipaddr} xqrepack.com" >/tmp/hosts/xqrepack.com
-		echo "${lanipaddr} www.xqrepack.com" >/tmp/hosts/www.xqrepack.com
+		echo "${lanipaddr} miwifi.com" >/tmp/hosts/miwifi.com
+		echo "${lanipaddr} www.miwifi.com" >/tmp/hosts/www.miwifi.com
 	}
 
 	#custom hosts
