@@ -1,4 +1,4 @@
-Multi-Lang for 1.1.19 AX3600 
+Multi-Lang for 1.1.21 AX3600 
 =========
 
 - Multi-Lang in web interface and Time select : english french german italian portuguese russian spanish turkish OK!
