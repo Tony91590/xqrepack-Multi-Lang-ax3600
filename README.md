@@ -3,7 +3,7 @@ Multi-Lang for 1.1.19 AX3600
 
 - Multi-Lang in web interface and Time select : english french german italian portuguese russian spanish turkish OK!
 - UPDATE FIRMWARE WIFI WLAN.HK.2.3.r2-00064-QCAHKSWPL_SILICONZ-3 v2 OK!
-- Disable MIWIFI SERVICE OK!
+- MIWIFI SERVICE ON bdata CN
 - LINK page luci xqrepack.com OK!
 - TX power in dBm options in web interface OK!
 
