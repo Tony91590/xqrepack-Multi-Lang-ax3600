@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# unpack, modify and re-pack the Xiaomi R3600 firmwar
+# unpack, modify and re-pack the Xiaomi R3600 firmware
 # removes checks for release channel before starting dropbear
 #
 # 2020.07.20  darell tan
