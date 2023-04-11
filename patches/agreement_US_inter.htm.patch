@@ -1,0 +1,23 @@
+--- ../unpacked/6000/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm	2022-07-11 09:52:22.505788600 +0300
++++ ../unpacked/6000/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm	2022-07-14 19:41:44.738040200 +0300
+@@ -152,7 +152,7 @@
+ <h3>12. Independence</h3>
+ <p>Some of the clauses in this agreement are not applicable. The other provisions of this agreement continue to apply and non-applicable terms and conditions will be modified in order to comply with the law.</p>
+ 
+-<h3>13. Completeness</h3>h3>
++<h3>13. Completeness</h3>
+ <h4>13.1 The User Agreement and Privacy Policy is the final, complete and exclusive agreement between you and the product. In addition, the agreement supersedes the discussions and agreements of the parties concerned about such matters (including previous end user licenses and the terms of service). </h4>
+ <h4>13.2 The title of each segment is for read only and contains no legal or contractual obligations.</h4>
+ <h4>13.3 Unless written consent has been given by Xiaomi, you may not transfer the rights and obligations specified in this agreement. Any violation of the above-mentioned rules or attempts to transfer will be in vain.</h4>
+
+--- ../unpacked/6000/usr/lib64/lua/luci/view/web/inc/agreement_US_inter.htm	2022-07-11 09:52:22.505788600 +0300
++++ ../unpacked/6000/usr/lib64/lua/luci/view/web/inc/agreement_US_inter.htm	2022-07-14 19:41:44.738040200 +0300
+@@ -152,7 +152,7 @@
+ <h3>12. Independence</h3>
+ <p>Some of the clauses in this agreement are not applicable. The other provisions of this agreement continue to apply and non-applicable terms and conditions will be modified in order to comply with the law.</p>
+ 
+-<h3>13. Completeness</h3>h3>
++<h3>13. Completeness</h3>
+ <h4>13.1 The User Agreement and Privacy Policy is the final, complete and exclusive agreement between you and the product. In addition, the agreement supersedes the discussions and agreements of the parties concerned about such matters (including previous end user licenses and the terms of service). </h4>
+ <h4>13.2 The title of each segment is for read only and contains no legal or contractual obligations.</h4>
+ <h4>13.3 Unless written consent has been given by Xiaomi, you may not transfer the rights and obligations specified in this agreement. Any violation of the above-mentioned rules or attempts to transfer will be in vain.</h4>

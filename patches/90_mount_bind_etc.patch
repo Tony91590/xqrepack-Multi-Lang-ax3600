@@ -1,0 +1,11 @@
+--- ./unpacked/6000/lib/preinit/90_mount_bind_etc	2022-07-11 09:52:17.313722800 +0300
++++ ./unpacked/6000/lib/preinit/90_mount_bind_etc	2022-07-14 14:46:16.007026600 +0300
+@@ -2,7 +2,7 @@
+ # Copyright (C) 2006-2010 OpenWrt.org
+ # Copyright (C) 2010 Vertical Communications
+
+-mount_dir="config datacenterconfig smartcontroller parentalctl smartvpn ppp crontabs"
++mount_dir="config datacenterconfig smartcontroller parentalctl smartvpn ppp crontabs dropbear"
+ mount_files="xqDb passwd shadow custom_hosts"
+
+ prepare_data_dir()
