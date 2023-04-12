@@ -1,6 +1,6 @@
 --- a/lib/wifi/qcawificfg80211.sh
 +++ b/lib/wifi/qcawificfg80211.sh
-@@ -2986,7 +2986,17 @@ enable_qcawificfg80211() {
+@@ -4318,7 +4318,17 @@ enable_qcawificfg80211() {
  		fi
  
  		config_get txpwr "$device" txpwr
