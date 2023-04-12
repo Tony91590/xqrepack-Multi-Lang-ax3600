@@ -121,6 +121,9 @@ if grep -q model=RA72 $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt; then
 	patch $FSDIR/lib/preinit/90_mount_bind_etc "$SCRIPT_ROOT_DIR/patches/90_mount_bind_etc.patch"
 fi
 
+# apply patch from xqrepack repository
+find patcho -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
+find patcho -type f -name \*.orig -delete
 
 die()
 {
