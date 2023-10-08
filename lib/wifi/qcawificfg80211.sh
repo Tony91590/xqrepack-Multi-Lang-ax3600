@@ -4290,7 +4290,7 @@ enable_vifs_qcawificfg80211() {
 		if [ "$bdmode" = "24G" ]; then 
 			max_power=$(uci -q get misc.wireless.if_2g_maxpower)
 			if [ -z "$max_power" ]; then
-				max_power=20
+				max_power=30
 			fi
 			case "$board_name" in
 			ap-mp*)
@@ -4308,11 +4308,7 @@ enable_vifs_qcawificfg80211() {
 		else
 			max_power=$(uci -q get misc.wireless.if_5g_maxpower)
 			if [ -z "$max_power" ]; then
-				if [ "$channel" -ge 100 ]; then
-					max_power=26
-				else
-					max_power=23
-				fi
+				max_power=30
 			fi
 		fi
 
