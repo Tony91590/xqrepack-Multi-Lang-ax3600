@@ -5485,7 +5485,7 @@ EOF
 	fi
 	if [ $devidx = $((1-$devidx24g)) ]; then
 		cat <<EOF
-	option channel_block_list '52,56,60,64,116,120,124,128,132,136,140,144,165'
+	option channel_block_list '52,56,60,64'
 	option miwifi_mesh '1'
 EOF
 	fi
