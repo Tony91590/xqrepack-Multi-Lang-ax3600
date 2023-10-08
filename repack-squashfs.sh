@@ -34,7 +34,7 @@ unsquashfs -f -d "$FSDIR" "$IMG"
 
 # add global firmware language packages
 cp -R ./uci-defaults/. $FSDIR/etc/uci-defaults
-chmod 755 $FSDIR/etc/uci-defaults/luci-i18n-*
+chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
