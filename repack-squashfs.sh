@@ -32,9 +32,9 @@ unsquashfs -f -d "$FSDIR" "$IMG"
 
 >&2 echo "patching squashfs..."
 
-# add global firmware language packages
 cp -R ./uci-defaults/. $FSDIR/etc/uci-defaults
 chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
+cp -R lib/* "$FSDIR/lib/"
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
