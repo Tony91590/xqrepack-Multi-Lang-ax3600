@@ -4,7 +4,7 @@
 # Confidential and Proprietary - Qualcomm Technologies, Inc.
 #
 #!/bin/sh
-#max_
+#
 # Copyright (c) 2014, 2016, The Linux Foundation. All rights reserved.
 #
 append DRIVERS "qcawificfg80211"
@@ -4306,14 +4306,14 @@ enable_vifs_qcawificfg80211() {
 			iwpriv "$ifname" vhtsubfee 0
 			iwpriv "$ifname" he_subfee 0
 		else
-			max_power=$(uci -q get misc.wireless.if_5g_maxpower)
-			if [ -z "$max_power" ]; then
-				if [ "$channel" -ge 100 ]; then
-					max_power=26
+		max_power=$(uci -q get misc.wireless.if_5g_maxpower)
+		if [ -z "$max_power" ]; then
+			if [ "$channel" -ge 100 ]; then
+				max_power=26
 			    else
-				    max_power=23
-			    fi	
-			fi
+				max_power=23
+			fi	
+		fi
 
 		# if max power is xx.5 dBm, max_power = 2 * maxpower + 256
 		# plz make sure your driver support this special method.
