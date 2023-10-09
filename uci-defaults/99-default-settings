@@ -3,9 +3,4 @@
 nvram set CountryCode=CN
 nvram commit
 
-uci set wireless.wifi0.country='US'
-uci set wireless.wifi1.country='US'
-uci set wireless.wifi2.country='US'
-uci commit wireless
-
 exit 0
