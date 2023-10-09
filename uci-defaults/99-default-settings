@@ -8,6 +8,6 @@ uci set wireless.wifi1.country='US'
 uci set wireless.wifi2.country='US'
 uci commit wireless
 
-wireless reload
+wifi reload
 
 exit 0
