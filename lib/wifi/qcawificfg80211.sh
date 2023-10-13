@@ -4309,7 +4309,7 @@ enable_vifs_qcawificfg80211() {
 				max_power=21
 			fi
 		fi
-  
+
 	        config_get txpwr "$device" txpwr
 		if [ "$txpwr" = "mid" ]; then
 			txpower=`expr $max_power - 1`
