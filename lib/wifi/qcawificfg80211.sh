@@ -4288,7 +4288,7 @@ enable_vifs_qcawificfg80211() {
 		# the latter doesn't exist
 		# for miwifi
 		if [ "$bdmode" = "24G" ]; then
-			max_power=17
+			max_power=19
 			case "$board_name" in
 			ap-mp*)
 				## IPQ5018 enable dynamic edcca
@@ -4303,10 +4303,10 @@ enable_vifs_qcawificfg80211() {
 			iwpriv "$ifname" vhtsubfee 0
 			iwpriv "$ifname" he_subfee 0
 		else
-			if [ "$channel" -ge 100 ]; then
-				max_power=24
+			if [ "$bdmode" = "5G" -a "$channel" -le 64 ]; then
+				max_power=23
 			else
-				max_power=21
+				max_power=24
 			fi
 		fi
 
