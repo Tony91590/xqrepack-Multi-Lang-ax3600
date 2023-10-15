@@ -4303,7 +4303,11 @@ enable_vifs_qcawificfg80211() {
 			iwpriv "$ifname" vhtsubfee 0
 			iwpriv "$ifname" he_subfee 0
 		else
-			max_power=24
+			if [ "$channel" -ge 100 ]; then
+				max_power=24
+			else
+				max_power=21
+			fi
 		fi
 
 		config_get txpwr "$device" txpwr
