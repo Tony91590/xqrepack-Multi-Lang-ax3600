@@ -59,7 +59,8 @@ done
 
 # cron jobs are mostly non-OpenWRT stuff
 for f in $FSDIR/etc/crontabs/*; do
-sed -i 's/^/#/' $f
+	sed -i 's/^/#/' $f
+done
 
 # as a last-ditch effort, change the *.miwifi.com hostnames to localhost
 sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
