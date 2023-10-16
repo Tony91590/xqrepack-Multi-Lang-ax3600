@@ -44,6 +44,7 @@ JS
 for SVC in stat_points statisticsservice \
 		datacenter \
 		smartcontroller \
+		wan_check \
 		plugincenter plugin_start_script.sh cp_preinstall_plugins.sh; do
 	rm -f $FSDIR/etc/rc.d/[SK]*$SVC
 done
@@ -53,9 +54,7 @@ for f in StatPoints mtd_crash_log logupload.lua otapredownload wanip_check.sh; d
 
 rm -f $FSDIR/etc/hotplug.d/iface/*wanip_check
 
-for f in wan_check messagingagent.sh; do
-	sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/$f
-done
+sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/messagingagent.sh
 
 # cron jobs are mostly non-OpenWRT stuff
 for f in $FSDIR/etc/crontabs/*; do
