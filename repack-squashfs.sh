@@ -57,6 +57,10 @@ for f in wan_check messagingagent.sh; do
 	sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/$f
 done
 
+# cron jobs are mostly non-OpenWRT stuff
+for f in $FSDIR/etc/crontabs/*; do
+sed -i 's/^/#/' $f
+
 # as a last-ditch effort, change the *.miwifi.com hostnames to localhost
 sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
