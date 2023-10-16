@@ -44,15 +44,12 @@ JS
 for SVC in stat_points statisticsservice \
 		datacenter \
 		smartcontroller \
-		wan_check \
 		plugincenter plugin_start_script.sh cp_preinstall_plugins.sh; do
 	rm -f $FSDIR/etc/rc.d/[SK]*$SVC
 done
 
 # prevent stats phone home & auto-update
-for f in StatPoints mtd_crash_log logupload.lua otapredownload wanip_check.sh; do > $FSDIR/usr/sbin/$f; done
-
-rm -f $FSDIR/etc/hotplug.d/iface/*wanip_check
+for f in StatPoints mtd_crash_log logupload.lua otapredownload; do > $FSDIR/usr/sbin/$f; done
 
 sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/messagingagent.sh
 
@@ -66,9 +63,6 @@ sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
 # wifi TX-power
 cp -R lib/* "$FSDIR/lib/"
-
-# led wan check on
-cp -R etc/* "$FSDIR/etc/"
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
