@@ -64,6 +64,9 @@ sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 # wifi TX-power
 cp -R lib/* "$FSDIR/lib/"
 
+# led wan check on
+cp -R etc/* "$FSDIR/etc/"
+
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
 mksquashfs "$FSDIR" "$IMG.new" -comp xz -b 256K -no-xattrs
