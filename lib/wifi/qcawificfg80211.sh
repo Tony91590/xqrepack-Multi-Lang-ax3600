@@ -4304,9 +4304,9 @@ enable_vifs_qcawificfg80211() {
 			iwpriv "$ifname" he_subfee 0
 		else
 			if [ "$channel" -lt 100 ]; then
-				max_power=24
-			else
 				max_power=23
+			else
+				max_power=24
 			fi
 		fi
 
