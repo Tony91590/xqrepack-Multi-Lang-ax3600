@@ -43,7 +43,8 @@ JS
 # dont start crap services
 for SVC in stat_points statisticsservice \
 		datacenter \
-		smartcontroller \
+		xq_info_sync_mqtt \
+		xiaoqiang_sync \
 		plugincenter plugin_start_script.sh cp_preinstall_plugins.sh; do
 	rm -f $FSDIR/etc/rc.d/[SK]*$SVC
 done
