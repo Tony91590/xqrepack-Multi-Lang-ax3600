@@ -32,38 +32,9 @@ unsquashfs -f -d "$FSDIR" "$IMG"
 sed -i 's/channel=.*/channel=release2/' "$FSDIR/etc/init.d/dropbear"
 sed -i 's/flg_ssh=.*/flg_ssh=1/' "$FSDIR/etc/init.d/dropbear"
 
-# mark web footer so that users can confirm the right version has been flashed
-sed -i 's/romVersion%>/& xqrepack/;' "$FSDIR/usr/lib/lua/luci/view/web/inc/footer.htm"
-
-# stop phone-home in web UI
-cat <<JS >> "$FSDIR/www/js/miwifi-monitor.js"
-(function(){ if (typeof window.MIWIFI_MONITOR !== "undefined") window.MIWIFI_MONITOR.log = function(a,b) {}; })();
-JS
-
-# dont start crap services
-for SVC in stat_points statisticsservice \
-		datacenter \
-		xq_info_sync_mqtt \
-		xiaoqiang_sync \
-		plugincenter plugin_start_script.sh cp_preinstall_plugins.sh; do
-	rm -f $FSDIR/etc/rc.d/[SK]*$SVC
-done
-
-# prevent stats phone home & auto-update
-for f in StatPoints mtd_crash_log logupload.lua otapredownload; do > $FSDIR/usr/sbin/$f; done
-
-sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/messagingagent.sh
-
-# cron jobs are mostly non-OpenWRT stuff
-for f in $FSDIR/etc/crontabs/*; do
-	sed -i 's/^/#/' $f
-done
-
-# as a last-ditch effort, change the *.miwifi.com hostnames to localhost
-sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
-
-# wifi TX-power
-cp -R lib/* "$FSDIR/lib/"
+# apply patch from xqrepack repository
+find patches -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
+find patches -type f -name \*.orig -delete
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
