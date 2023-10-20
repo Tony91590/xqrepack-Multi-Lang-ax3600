@@ -25,16 +25,6 @@ jobs:
       
     - uses: actions/upload-artifact@v3
       with:
-        name: miwifi_ra72_firmware_129d1_1.0.103+SSH+${{ env.FIRMWARE_SLUG }}
-        path: miwifi_ra72_firmware_129d1_1.0.103+SSH+${{ env.FIRMWARE_SLUG }}.bin
-
-    - uses: actions/upload-artifact@v3
-      with:
-        name: r6000-raw-img-tx-power+SSH+${{ env.FIRMWARE_SLUG }}
-        path: r6000-raw-img-tx-power+SSH+${{ env.FIRMWARE_SLUG }}.bin
-
-    - uses: actions/upload-artifact@v3
-      with:
         name: miwifi_ra72_firmware_98605_1.0.55+SSH+${{ env.FIRMWARE_SLUG }}
         path: miwifi_ra72_firmware_98605_1.0.55+SSH+${{ env.FIRMWARE_SLUG }}.bin
 
