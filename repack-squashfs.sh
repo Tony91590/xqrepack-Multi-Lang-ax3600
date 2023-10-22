@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# unpack, modify and re-pack the Xiaomi R3600 firmware
+# unpack, modify and re-pack the Xiaomi R6000 firmware
 # removes checks for release channel before starting dropbear
 #
 # 2020.07.20  darell tan
@@ -110,8 +110,6 @@ chown root:root "$FSDIR/sbin/xqflash"
 #sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
 cp -R lib/* "$FSDIR/lib/"
-
-python translate/translate.py $FSDIR
 
 die()
 {
