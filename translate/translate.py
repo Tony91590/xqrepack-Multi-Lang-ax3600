@@ -42,11 +42,11 @@ class Translator:
 	def KeyComparatorLongAlpha(el):
 		return (-len(el), el)
 	
-	def LoadTranslateTable(self):
-		self.scriptPath = os.path.dirname(os.path.realpath(sys.argv[0]))
-		with io.open(os.path.join(self.scriptPath, "fr.json"), 'r', encoding='utf-8') as file:
-			self.translateTable = json.load(file)
-		self.keysToTranslate = sorted(self.translateTable.keys(), key=Translator.KeyComparatorLongAlpha);
+	#def LoadTranslateTable(self):
+	#	self.scriptPath = os.path.dirname(os.path.realpath(sys.argv[0]))
+	#	with io.open(os.path.join(self.scriptPath, "fr.json"), 'r', encoding='utf-8') as file:
+	#		self.translateTable = json.load(file)
+	#	self.keysToTranslate = sorted(self.translateTable.keys(), key=Translator.KeyComparatorLongAlpha);
 	
 	def TranslateFile(self, path):
 		countPlaces = 0
