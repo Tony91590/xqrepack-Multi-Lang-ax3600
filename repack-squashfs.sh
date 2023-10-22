@@ -111,6 +111,9 @@ chown root:root "$FSDIR/sbin/xqflash"
 
 cp -R lib/* "$FSDIR/lib/"
 
+cp ./modules/languages/*.lmo "$FSDIR/usr/lib/lua/luci/i18n"
+sed -i "1 s/zh_cn/en/" $FSDIR/etc/config/luci
+
 die()
 {
 	echo "$1"
