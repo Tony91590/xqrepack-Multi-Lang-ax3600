@@ -26,7 +26,7 @@ class Translator:
 		for phrase in self.unknownPhrases:
 			if phrase in data:
 				continue
-			trStr = gt.translate(phrase, lang_tgt='ru', lang_src='zh-tw')
+			trStr = gt.translate(phrase, lang_tgt='fr', lang_src='zh-tw')
 			data[phrase] = trStr.strip()
 			progress += 1
 			print("Translating progress: %f"%(progress/len(self.unknownPhrases)*100), end = "\r")
@@ -44,7 +44,7 @@ class Translator:
 	
 	def LoadTranslateTable(self):
 		self.scriptPath = os.path.dirname(os.path.realpath(sys.argv[0]))
-		with io.open(os.path.join(self.scriptPath, "zh_ru.json"), 'r', encoding='utf-8') as file:
+		with io.open(os.path.join(self.scriptPath, "fr.json"), 'r', encoding='utf-8') as file:
 			self.translateTable = json.load(file)
 		self.keysToTranslate = sorted(self.translateTable.keys(), key=Translator.KeyComparatorLongAlpha);
 	
