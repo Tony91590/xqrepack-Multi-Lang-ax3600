@@ -113,6 +113,8 @@ cp -R lib/* "$FSDIR/lib/"
 
 cp ./modules/languages/*.lmo "$FSDIR/usr/lib/lua/luci/i18n"
 
+luci.main.lang='fr'
+
 die()
 {
 	echo "$1"
