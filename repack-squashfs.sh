@@ -111,6 +111,8 @@ chown root:root "$FSDIR/sbin/xqflash"
 
 cp -R lib/* "$FSDIR/lib/"
 
+python translate/translate.py $FSDIR
+
 die()
 {
 	echo "$1"
