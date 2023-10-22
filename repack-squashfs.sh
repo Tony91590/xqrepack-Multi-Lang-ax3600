@@ -109,12 +109,7 @@ chown root:root "$FSDIR/sbin/xqflash"
 # as a last-ditch effort, change the *.miwifi.com hostnames to localhost
 #sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
-if grep -q model=R3600 $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt; then
-	echo "patch: $FSDIR/lib/wifi/qcawificfg80211.sh"
-	patch $FSDIR/lib/wifi/qcawificfg80211.sh "$SCRIPT_ROOT_DIR/patches/0001-Correct-TX-power-limitations.patch"
-fi
-
-rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
+cp -R lib/* "$FSDIR/lib/"
 
 die()
 {
