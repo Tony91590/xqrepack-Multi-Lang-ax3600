@@ -19,7 +19,7 @@ jobs:
     - name: pip upgrade
       run: python -m pip install --upgrade pip
     - name: pip install
-      run: pip install python-lzo ubi_reader
+      run: pip install python-lzo ubi_reader google_trans_new
     - name: make
       run: make
       
