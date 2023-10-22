@@ -4303,28 +4303,28 @@ enable_vifs_qcawificfg80211() {
 			iwpriv "$ifname" vhtsubfee 0
 			iwpriv "$ifname" he_subfee 0
 		else
-			if [ "$channel" = 36 ]; then
+			if [ "$channel" -lt 36 ]; then
                         	max_power=21
 			fi
-   			if [ "$channel" = 40 ]; then
+   			if [ "$channel" -lt 40 ]; then
                         	max_power=21
 			fi
-   			if [ "$channel" = 44 ]; then
+   			if [ "$channel" -lt 44 ]; then
                         	max_power=21
 			fi
-   			if [ "$channel" = 48 ]; then
+   			if [ "$channel" -lt 48 ]; then
                         	max_power=21
 			fi
-   			if [ "$channel" = 52 ]; then
+   			if [ "$channel" -lt 52 ]; then
                         	max_power=21
 			fi
-   			if [ "$channel" = 56 ]; then
+   			if [ "$channel" -lt 56 ]; then
                         	max_power=21
 			fi
-   			if [ "$channel" = 60 ]; then
+   			if [ "$channel" -lt 60 ]; then
                         	max_power=21
 			fi
-   			if [ "$channel" = 64 ]; then
+   			if [ "$channel" -lt 64 ]; then
                         	max_power=21
 			else
 				max_power=24
