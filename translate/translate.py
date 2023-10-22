@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from lxml import etree
 import requests
 from google_trans_new import google_translator
-import picklimport pickle
+import picklimport 
 
 diccionario = {}
 def traducir_texto(text):
