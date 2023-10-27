@@ -1,3 +1,5 @@
+--- a/lib/wifi/qcawificfg80211.sh
++++ b/lib/wifi/qcawificfg80211.sh
 @@ -3854,7 +3854,7 @@
  	option macaddr	$(cat /sys/class/net/${dev}/address)
  	option hwmode	11${mode_11}
