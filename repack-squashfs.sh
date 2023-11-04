@@ -135,6 +135,9 @@ rm -f $FSDIR/usr/lib/lua/luci/view/web/setting/wifi.htm.orig
 rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm.orig
 rm -f $FSDIR/lib/preinit/90_mount_bind_etc.orig
 
+# copy the latest firmware of wifi
+#cp -R lib/* "$FSDIR/lib/"
+
 die()
 {
 	echo "$1"
