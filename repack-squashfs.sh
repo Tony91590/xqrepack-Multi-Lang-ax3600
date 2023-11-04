@@ -89,7 +89,6 @@ cp xqflash "$FSDIR/sbin"
 chmod 0755      "$FSDIR/sbin/xqflash"
 chown root:root "$FSDIR/sbin/xqflash"
 
-
 # dont start crap services
 for SVC in stat_points statisticsservice \
 		datacenter \
