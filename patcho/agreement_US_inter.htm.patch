@@ -1,5 +1,5 @@
---- ../unpacked/6000/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm	2022-07-11 09:52:22.505788600 +0300
-+++ ../unpacked/6000/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm	2022-07-14 19:41:44.738040200 +0300
+--- a/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm	2022-07-11 09:52:22.505788600 +0300
++++ b/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm	2022-07-14 19:41:44.738040200 +0300
 @@ -152,7 +152,7 @@
  <h3>12. Independence</h3>
  <p>Some of the clauses in this agreement are not applicable. The other provisions of this agreement continue to apply and non-applicable terms and conditions will be modified in order to comply with the law.</p>

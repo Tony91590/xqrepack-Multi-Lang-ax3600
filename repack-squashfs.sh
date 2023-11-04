@@ -128,6 +128,13 @@ fi
 cp -R ./uci-defaults/. $FSDIR/etc/uci-defaults
 chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
 
+rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
+rm -f $FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm.orig
+rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/wifi.html.orig
+rm -f $FSDIR/usr/lib/lua/luci/view/web/setting/wifi.htm.orig
+rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm.orig
+rm -f $FSDIR/lib/preinit/90_mount_bind_etc.orig
+
 die()
 {
 	echo "$1"
