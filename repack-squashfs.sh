@@ -80,9 +80,9 @@ else
 fi
 
 # stop phone-home in web UI
-#cat <<JS >> "$FSDIR/www/js/miwifi-monitor.js"
-#(function(){ if (typeof window.MIWIFI_MONITOR !== "undefined") window.MIWIFI_MONITOR.log = function(a,b) {}; })();
-#JS
+cat <<JS >> "$FSDIR/www/js/miwifi-monitor.js"
+(function(){ if (typeof window.MIWIFI_MONITOR !== "undefined") window.MIWIFI_MONITOR.log = function(a,b) {}; })();
+JS
 
 # add xqflash tool into firmware for easy upgrades
 cp xqflash "$FSDIR/sbin"
@@ -90,31 +90,31 @@ chmod 0755      "$FSDIR/sbin/xqflash"
 chown root:root "$FSDIR/sbin/xqflash"
 
 # dont start crap services
-#for SVC in stat_points statisticsservice \
-#		datacenter \
-#		smartcontroller \
-#		wan_check \
-#		plugincenter plugin_start_script.sh cp_preinstall_plugins.sh; do
-#	rm -f $FSDIR/etc/rc.d/[SK]*$SVC
-#done
+for SVC in stat_points statisticsservice \
+		datacenter \
+		smartcontroller \
+		wan_check \
+		plugincenter plugin_start_script.sh cp_preinstall_plugins.sh; do
+	rm -f $FSDIR/etc/rc.d/[SK]*$SVC
+done
 
 # prevent stats phone home & auto-update
-#for f in StatPoints mtd_crash_log logupload.lua otapredownload wanip_check.sh; do > $FSDIR/usr/sbin/$f; done
+for f in StatPoints mtd_crash_log logupload.lua otapredownload wanip_check.sh; do > $FSDIR/usr/sbin/$f; done
 
 # prevent auto-update
 > $FSDIR/usr/sbin/otapredownload
 
-#rm -f $FSDIR/etc/hotplug.d/iface/*wanip_check
+rm -f $FSDIR/etc/hotplug.d/iface/*wanip_check
 
-#sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/messagingagent.sh
+sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/messagingagent.sh
 
 # cron jobs are mostly non-OpenWRT stuff
-#for f in $FSDIR/etc/crontabs/*; do
-#	sed -i 's/^/#/' $f
-#done
+for f in $FSDIR/etc/crontabs/*; do
+	sed -i 's/^/#/' $f
+done
 
 # as a last-ditch effort, change the *.miwifi.com hostnames to localhost
-#sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
+sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
 # apply patch from xqrepack repository
 find patcho -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
