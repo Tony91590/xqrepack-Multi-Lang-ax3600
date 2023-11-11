@@ -125,8 +125,8 @@ if grep -q model=RA72 $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt; then
 	patch $FSDIR/lib/preinit/90_mount_bind_etc "$SCRIPT_ROOT_DIR/patches/90_mount_bind_etc.patch"
 fi
 
-cp -R ./uci-defaults/. $FSDIR/etc/uci-defaults
-chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
+#cp -R ./uci-defaults/. $FSDIR/etc/uci-defaults
+#chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
 
 rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
 rm -f $FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm.orig
