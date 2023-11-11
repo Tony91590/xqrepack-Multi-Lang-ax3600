@@ -48,6 +48,7 @@ sed -i 's/romVersion%>/& xqrepack/;' "$FSDIR/usr/lib/lua/luci/view/web/inc/foote
 
 # stop resetting root password
 sed -i '/set_user(/a return 0' "$FSDIR/etc/init.d/system"
+sed -i 's/flg_init_pwd=.*/flg_init_pwd=0/' "$FSDIR/etc/init.d/boot_check"
 
 # make sure our backdoors are always enabled by default
 sed -i '/ssh_en/d;' "$FSDIR/usr/share/xiaoqiang/xiaoqiang-reserved.txt"
@@ -93,7 +94,6 @@ chown root:root "$FSDIR/sbin/xqflash"
 for SVC in stat_points statisticsservice \
 		datacenter \
 		smartcontroller \
-		wan_check \
 		plugincenter plugin_start_script.sh cp_preinstall_plugins.sh; do
 	rm -f $FSDIR/etc/rc.d/[SK]*$SVC
 done
@@ -101,12 +101,11 @@ done
 # prevent stats phone home & auto-update
 for f in StatPoints mtd_crash_log logupload.lua otapredownload wanip_check.sh; do > $FSDIR/usr/sbin/$f; done
 
-# prevent auto-update
-> $FSDIR/usr/sbin/otapredownload
-
 rm -f $FSDIR/etc/hotplug.d/iface/*wanip_check
 
-sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/messagingagent.sh
+for f in wan_check messagingagent.sh; do
+	sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/$f
+done
 
 # cron jobs are mostly non-OpenWRT stuff
 for f in $FSDIR/etc/crontabs/*; do
@@ -124,9 +123,6 @@ if grep -q model=RA72 $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt; then
 	echo "patch: $FSDIR/lib/preinit/90_mount_bind_etc"
 	patch $FSDIR/lib/preinit/90_mount_bind_etc "$SCRIPT_ROOT_DIR/patches/90_mount_bind_etc.patch"
 fi
-
-#cp -R ./uci-defaults/. $FSDIR/etc/uci-defaults
-#chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
 
 rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
 rm -f $FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm.orig
