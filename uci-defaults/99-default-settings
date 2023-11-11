@@ -1,6 +1,0 @@
-#!/bin/sh
-
-nvram set CountryCode=CN
-nvram commit
-
-exit 0
