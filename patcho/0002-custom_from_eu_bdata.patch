@@ -1,0 +1,29 @@
+--- a/lib/wifi/qcawificfg80211.sh
++++ b/lib/wifi/qcawificfg80211.sh
+@@ -4290,7 +4290,7 @@
+ 		if [ "$bdmode" = "24G" ]; then
+ 			max_power=$(uci -q get misc.wireless.if_2g_maxpower)
+ 			if [ -z "$max_power" ]; then
+-				max_power=30
++				max_power=24
+ 			fi
+ 			case "$board_name" in
+ 			ap-mp*)
+@@ -4308,7 +4308,7 @@
+ 		else
+ 			max_power=$(uci -q get misc.wireless.if_5g_maxpower)
+ 			if [ -z "$max_power" ]; then
+-				max_power=30
++				max_power=24
+ 			fi
+ 		fi
+
+@@ -5447,7 +5447,7 @@
+ 	option macaddr	$(cat /sys/class/net/${dev}/address)
+ 	option hwmode	11${mode_11}
+ 	option htmode	'${htmode}'
+-	option country	'$country_code'
++	option country	'US'
+ 	option disabled '$disable'
+ 	option txbf '3'
+ 	option ax '1'
