@@ -122,11 +122,6 @@ cp -R etc/* "$FSDIR/etc/"
 find patcho -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
 find patcho -type f -name \*.orig -delete
 
-if grep -q model=RA72 $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt; then
-	echo "patch: $FSDIR/lib/preinit/90_mount_bind_etc"
-	patch $FSDIR/lib/preinit/90_mount_bind_etc "$SCRIPT_ROOT_DIR/patches/90_mount_bind_etc.patch"
-fi
-
 rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
 rm -f $FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm.orig
 rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/wifi.html.orig
