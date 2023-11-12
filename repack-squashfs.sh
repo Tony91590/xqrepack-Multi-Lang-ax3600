@@ -115,6 +115,9 @@ done
 # as a last-ditch effort, change the *.miwifi.com hostnames to localhost
 sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
+# custom
+cp -R etc/* "$FSDIR/etc/"
+
 # apply patch from xqrepack repository
 find patcho -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
 find patcho -type f -name \*.orig -delete
