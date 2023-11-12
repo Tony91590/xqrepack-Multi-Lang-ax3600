@@ -32,13 +32,6 @@ unsquashfs -f -d "$FSDIR" "$IMG"
 
 >&2 echo "patching squashfs..."
 
-# create /opt dir
-mkdir "$FSDIR/opt"
-chmod 755 "$FSDIR/opt"
-
-# create /layout dir
-mkdir "$FSDIR/layout"
-
 # modify dropbear init
 sed -i 's/channel=.*/channel=release2/' "$FSDIR/etc/init.d/dropbear"
 sed -i 's/flg_ssh=.*/flg_ssh=1/' "$FSDIR/etc/init.d/dropbear"
