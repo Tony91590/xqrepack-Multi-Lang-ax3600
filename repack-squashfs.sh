@@ -100,6 +100,23 @@ done
 # as a last-ditch effort, change the *.miwifi.com hostnames to localhost
 sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
+# apply patch from xqrepack repository
+find patcho -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
+find patcho -type f -name \*.orig -delete
+
+if grep -q model=RA72 $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt; then
+	echo "patch: $FSDIR/lib/preinit/90_mount_bind_etc"
+	patch $FSDIR/lib/preinit/90_mount_bind_etc "$SCRIPT_ROOT_DIR/patches/90_mount_bind_etc.patch"
+fi
+
+rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
+rm -f $FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm.orig
+rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/wifi.html.orig
+rm -f $FSDIR/usr/lib/lua/luci/view/web/setting/wifi.htm.orig
+rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm.orig
+rm -f $FSDIR/lib/preinit/90_mount_bind_etc.orig
+rm -f $FSDIR/lib/wifi/hostapd.sh.orig
+
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
 mksquashfs "$FSDIR" "$IMG.new" -comp xz -b 256K -no-xattrs
