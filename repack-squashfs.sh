@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
-# unpack, modify and re-pack the Xiaomi R6000 firmware
+# unpack, modify and re-pack the Xiaomi R3600 firmware
 # removes checks for release channel before starting dropbear
 #
 # 2020.07.20  darell tan
@@ -9,8 +9,7 @@
 set -e
 
 IMG=$1
-ROOTPW="$PASSWORD"  # "password"
-SCRIPT_ROOT_DIR="$PWD"
+ROOTPW='$1$qtLLI4cm$c0v3yxzYPI46s28rbAYG//'  # "password"
 
 [ -e "$IMG" ] || { echo "rootfs img not found $IMG"; exit 1; }
 
@@ -19,7 +18,6 @@ command -v unsquashfs &>/dev/null || { echo "install unsquashfs"; exit 1; }
 mksquashfs -version >/dev/null || { echo "install mksquashfs"; exit 1; }
 
 FSDIR=`mktemp -d /tmp/resquash-rootfs.XXXXX`
-echo "FSDIR: $FSDIR"
 trap "rm -rf $FSDIR" EXIT
 
 # test mknod privileges
@@ -28,16 +26,12 @@ rm -f "$FSDIR/foo"
 
 >&2 echo "unpacking squashfs..."
 unsquashfs -f -d "$FSDIR" "$IMG"
-###############################################################################
 
 >&2 echo "patching squashfs..."
 
 # create /opt dir
 mkdir "$FSDIR/opt"
 chmod 755 "$FSDIR/opt"
-
-# create /layout dir
-mkdir "$FSDIR/layout"
 
 # modify dropbear init
 sed -i 's/channel=.*/channel=release2/' "$FSDIR/etc/init.d/dropbear"
@@ -48,7 +42,6 @@ sed -i 's/romVersion%>/& xqrepack/;' "$FSDIR/usr/lib/lua/luci/view/web/inc/foote
 
 # stop resetting root password
 sed -i '/set_user(/a return 0' "$FSDIR/etc/init.d/system"
-sed -i 's/flg_init_pwd=.*/flg_init_pwd=0/' "$FSDIR/etc/init.d/boot_check"
 
 # make sure our backdoors are always enabled by default
 sed -i '/ssh_en/d;' "$FSDIR/usr/share/xiaoqiang/xiaoqiang-reserved.txt"
@@ -73,12 +66,7 @@ boot_hook_add preinit_main enable_dev_access
 NVRAM
 
 # modify root password
-if [ -n "ROOTPW" ]
-then
-	sed -i "s@root:[^:]*@root:${ROOTPW}@" "$FSDIR/etc/shadow"
-else
-	echo -e "\033[0;31mROOT Password hasn't been changed!!!\033[0m\nTo modify this password please define it in ROOTPW env variable"
-fi
+sed -i "s@root:[^:]*@root:${ROOTPW}@" "$FSDIR/etc/shadow"
 
 # stop phone-home in web UI
 cat <<JS >> "$FSDIR/www/js/miwifi-monitor.js"
@@ -93,19 +81,16 @@ chown root:root "$FSDIR/sbin/xqflash"
 # dont start crap services
 for SVC in stat_points statisticsservice \
 		datacenter \
-		smartcontroller \
+		xq_info_sync_mqtt \
+		xiaoqiang_sync \
 		plugincenter plugin_start_script.sh cp_preinstall_plugins.sh; do
 	rm -f $FSDIR/etc/rc.d/[SK]*$SVC
 done
 
 # prevent stats phone home & auto-update
-for f in StatPoints mtd_crash_log logupload.lua otapredownload wanip_check.sh; do > $FSDIR/usr/sbin/$f; done
+for f in StatPoints mtd_crash_log logupload.lua otapredownload; do > $FSDIR/usr/sbin/$f; done
 
-rm -f $FSDIR/etc/hotplug.d/iface/*wanip_check
-
-for f in wan_check messagingagent.sh; do
-	sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/$f
-done
+sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/messagingagent.sh
 
 # cron jobs are mostly non-OpenWRT stuff
 for f in $FSDIR/etc/crontabs/*; do
@@ -114,30 +99,6 @@ done
 
 # as a last-ditch effort, change the *.miwifi.com hostnames to localhost
 sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
-
-# custom
-cp -R etc/* "$FSDIR/etc/"
-
-# apply patch from xqrepack repository
-find patcho -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
-find patcho -type f -name \*.orig -delete
-
-rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
-rm -f $FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm.orig
-rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/wifi.html.orig
-rm -f $FSDIR/usr/lib/lua/luci/view/web/setting/wifi.htm.orig
-rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm.orig
-rm -f $FSDIR/lib/preinit/90_mount_bind_etc.orig
-rm -f $FSDIR/lib/wifi/hostapd.sh.orig
-
-# copy the latest firmware of wifi
-#cp -R lib/* "$FSDIR/lib/"
-
-die()
-{
-	echo "$1"
-	exit 1
-}
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
