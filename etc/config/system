@@ -5,9 +5,9 @@ config system
 
 config hostdns 'netdt'
 	option cn_domain 'www.google.com www.facebook.com'
-	option cn_dns '1.1.1.1 8.8.4.4'
+	option cn_dns '1.1.1.1 1.0.0.1'
 	option world_domain 'www.google.com www.facebook.com'
-	option world_dns '1.1.1.1 8.8.4.4'
+	option world_dns '1.1.1.1 1.0.0.1'
 		
 config timeserver ntp
 	list server '0.openwrt.pool.ntp.org'
