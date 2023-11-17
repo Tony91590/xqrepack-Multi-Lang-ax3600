@@ -25,5 +25,5 @@ jobs:
               
     - uses: actions/upload-artifact@v3
       with:
-        name: miwifi_ra72_firmware_b0f85_1.0.51+SSH+${{ env.FIRMWARE_SLUG }}
-        path: miwifi_ra72_firmware_b0f85_1.0.51+SSH+${{ env.FIRMWARE_SLUG }}.bin
+        name: miwifi_ra72_firmware_129d1_1.0.103+SSH+${{ env.FIRMWARE_SLUG }}
+        path: miwifi_ra72_firmware_129d1_1.0.103+SSH+${{ env.FIRMWARE_SLUG }}.bin
