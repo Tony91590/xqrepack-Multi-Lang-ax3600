@@ -120,6 +120,7 @@ rm -f $FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm.orig
 rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/wifi.html.orig
 rm -f $FSDIR/usr/lib/lua/luci/view/web/setting/wifi.htm.orig
 rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm.orig
+rm -f $FSDIR/etc/config/xqled.orig
 
 die()
 {
