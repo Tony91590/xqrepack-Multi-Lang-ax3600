@@ -1,2 +1,23 @@
-usr/share/xiaoqiang
-/xiaoqiang_version
+config core 'version'
+	# ROM ver
+	option ROM '1.0.55'
+	# channel
+	option CHANNEL 'release'
+	# hardware platform R1AC or R1N etc.
+	option HARDWARE 'RA72'
+	# CFE ver
+	option UBOOT '1.0.2'
+	# Linux Kernel ver
+	option LINUX '4.4.16'
+	# RAMFS ver
+	option RAMFS '0.0.1'
+	# SQUASHFS ver
+	option SQAFS '0.0.1'
+	# ROOTFS ver
+	option ROOTFS '0.0.1'
+  #build time
+  option BUILDTIME 'Mon, 22 Mar 2021 07:39:48 +0000'
+  #build timestamp
+  option BUILDTS '1616398788'
+  #build git tag
+   option GTAG 'commit 8548348cecf5e0f3933aab3b6fe740b5d0a0e9e8'
