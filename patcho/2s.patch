@@ -1,3 +1,24 @@
+--- a/lib/wifi/qcawificfg80211.sh
++++ b/lib/wifi/qcawificfg80211.sh
+@@ -2986,7 +2986,17 @@ enable_qcawificfg80211() {
+ 		fi
+ 
+ 		config_get txpwr "$device" txpwr
+-		if [ "$txpwr" = "mid" ]; then
++		# If you return to stock FW from this patched FW, $max_power setting will be used by default
++		txpwr_is_set_in_dbm=0
++		case "$txpwr" in
++			dbm*)
++				txpwr_is_set_in_dbm=1
++				;;
++		esac
++		# This means that you can set exact TX power in dBm with POST request to http://192.168.31.1/cgi-bin/luci/;stok=<STOK>/api/xqnetwork/set_wifi
++		if [ $txpwr_is_set_in_dbm == 1 ]; then
++			txpower="${txpwr#dbm}"
++		elif [ "$txpwr" = "mid" ]; then
+ 			txpower=`expr $max_power - 1`
+ 		elif [ "$txpwr" = "min" ]; then
+ 			txpower=`expr $max_power - 3`
 --- a/usr/lib/lua/luci/view/web/apsetting/wifi.htm
 +++ b/usr/lib/lua/luci/view/web/apsetting/wifi.htm
 @@ -210,6 +210,36 @@ local hardware = string.lower( XQSysUtil.getHardware() )
