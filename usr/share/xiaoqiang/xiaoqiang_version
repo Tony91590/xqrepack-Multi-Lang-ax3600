@@ -1,6 +1,6 @@
 config core 'version'
 	# ROM ver
-	option ROM '1.0.55'
+	option ROM '1.0.55-xqrepack'
 	# channel
 	option CHANNEL 'release'
 	# hardware platform R1AC or R1N etc.
