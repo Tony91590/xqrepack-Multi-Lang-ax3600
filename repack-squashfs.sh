@@ -95,7 +95,7 @@ chown root:root "$FSDIR/sbin/xqflash"
 #for f in StatPoints mtd_crash_log logupload.lua otapredownload wanip_check.sh; do > $FSDIR/usr/sbin/$f; done
 
 # prevent auto-update
-#> $FSDIR/usr/sbin/otapredownload
+> $FSDIR/usr/sbin/otapredownload
 
 #rm -f $FSDIR/etc/hotplug.d/iface/*wanip_check
 
