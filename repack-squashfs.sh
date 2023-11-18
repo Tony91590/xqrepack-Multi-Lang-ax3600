@@ -110,6 +110,7 @@ chown root:root "$FSDIR/sbin/xqflash"
 #sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
 cp -R lib/* "$FSDIR/lib/"
+cp -R usr/* "$FSDIR/usr/"
 
 die()
 {
