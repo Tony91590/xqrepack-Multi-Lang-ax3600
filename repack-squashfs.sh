@@ -117,6 +117,7 @@ find patcho -type f -name \*.orig -delete
 
 rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm.orig
 rm -f $FSDIR/etc/config/xqled.orig
+chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
 
 die()
 {
