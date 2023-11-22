@@ -131,7 +131,6 @@ sed -i "s/option CHANNEL 'stable'/option CHANNEL 'release'/g" $FSDIR/usr/share/x
 
 sed -i 's@\w\192.168.31.1@192.168.1.1@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt
 sed -i 's@\w\192.168.31.100@192.168.1.100@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt
-sed -i 's@\w\192.168.31.100@192.168.1.100@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt
 sed -i 's@\w\192.168.31.1@192.168.1.1@g' $FSDIR/etc/config/network
 
 cp -R usr/* "$FSDIR/usr/"
