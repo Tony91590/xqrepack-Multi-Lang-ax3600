@@ -123,9 +123,6 @@ chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
 chmod 755 $FSDIR/etc/uci-defaults/luci-i18n-russian
 chmod 755 $FSDIR/etc/uci-defaults/luci-i18n-english
 
-# unlock WEB lang menu
-sed -i 's/ and features\["system"\]\["i18n"\] == "1" //' $FSDIR/usr/lib/lua/luci/view/web/inc/sysinfo.htm
-
 # unlock change luci.main.lang
 sed -i "s/option CHANNEL 'stable'/option CHANNEL 'release'/g" $FSDIR/usr/share/xiaoqiang/xiaoqiang_version
 
