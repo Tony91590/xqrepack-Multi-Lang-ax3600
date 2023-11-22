@@ -137,8 +137,6 @@ sed -i 's@192.168.31.1@192.168.1.1@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defau
 sed -i 's@192.168.31.100@192.168.1.100@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt
 sed -i 's@192.168.31.1@192.168.1.1@g' $FSDIR/etc/config/network
 
-cp -R usr/* "$FSDIR/usr/"
-
 die()
 {
 	echo "$1"
