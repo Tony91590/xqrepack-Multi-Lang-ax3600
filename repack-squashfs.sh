@@ -32,6 +32,10 @@ unsquashfs -f -d "$FSDIR" "$IMG"
 
 >&2 echo "patching squashfs..."
 
+# replace www TRANSLATE and lua
+cp -R www/* "$FSDIR/www/"
+cp -R lua/* "$FSDIR/usr/lib/lua/"
+
 # modify dropbear init
 sed -i 's/channel=.*/channel=release2/' "$FSDIR/etc/init.d/dropbear"
 sed -i 's/flg_ssh=.*/flg_ssh=1/' "$FSDIR/etc/init.d/dropbear"
