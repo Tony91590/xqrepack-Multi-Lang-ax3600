@@ -1,0 +1,439 @@
+<%
+--[[
+    Info    路由器局域网设置
+]]--
+local ver = require("xiaoqiang.XQVersion").webVersion
+%>
+<%include("web/inc/head")%>
+<title><%:小米路由器%></title>
+<meta name="viewport" content="width=1200">
+<link href="<%=resource%>/web/css/bc.css?v=<%=ver%>" rel="stylesheet">
+<link href="<%=resource%>/web/css/proset.css?v=<%=ver%>" rel="stylesheet">
+<link href="<%=resource%>/web/css/ddns.css?v=<%=ver%>" rel="stylesheet">
+</head>
+<body>
+<div id="doc">
+    <%include("web/inc/header")%>
+    <div id="bd">
+        <div class="mod-set mod-dhcp" id="lanDhcp">
+            <div class="hd">
+                <div class="help">
+                    <span class="ico"></span>
+                    <span class="arrow-wrap" id="helpArrow">
+                        <span class="arrow1"></span>
+                        <span class="arrow2"></span>
+                    </span>
+                </div>
+                <h3><%:DHCP服务%></h3>
+                <div class="switch">
+                    <a href="#" id="dhcpswitch" class="btn-switch btn-switch-off"></a>
+                </div>
+            </div>
+            <div class="bd">
+                <div class="section section-help" id="helpSection">
+                    <div class="help-cont">
+                        <span class="help-close"></span>
+                        <div class="what">
+                            <h3><%:什么是DHCP？%></h3>
+                        </div>
+                        <div class="qa">
+                            <p><%:1、DHCP 服务器：开启后，小米路由可以自动向您的接入设备分配 IP 地址、DNS 服务器地址等网络参数，并通过此功能实现 IP 地址的集中管理；关闭后，小米路由将不为您的计算机自动分配 IP 地址、DNS 服务器地址等网络参数，当另一台路由器通过 Wi-Fi 中继方式连接此路由器时，中继连接将会失败。%></p>
+                            <p><%:2、租期：IP 地址分配给局域网计算机以后，如果使用时间超过这个租期，小米路由将给计算机分配新的 IP 地址。%></p>
+                            <p><%:3、路由器局域网IP地址：登陆Web配置后台的地址。%></p>
+                            <p><%:4、默认网关：路由器下接入设备的默认网关，默认是路由器内网IP。%></p>
+                            <p><%:5、静态 IP 地址绑定：通常您计算机的 IP 地址由路由器动态分配。如果您希望计算机拥有静态 IP 地址，您可以在静态 IP 地址绑定列表中手动添加您计算机的 MAC 地址和希望使用的静态 IP 地址。注意，静态 IP 地址需与路由器的局域网 IP 地址在同一网段。%></p>
+                        </div>
+                    </div>
+                </div>
+                <form method="post" class="form form-dhcp" name="netDhcp" id="netDhcp" action="#">
+                    <input type="hidden" name="ignore">
+                    <div class="set" style="display:none;">
+                        <div class="form-item">
+                            <label class="k"><%:开始IP%></label>
+                            <span class="v">
+                                <span class="ipprefix">192.168.31.</span><input type="text" class="ipt-text iplimit" name="start" id="startip" reqMsg="<%:开始IP%>" datatype="n-3" minValue="2" maxValue="254" style="width:128px"  maxlength="3">
+                            </span>
+                            <em class="t"></em>
+                        </div>
+                        <div class="form-item">
+                            <label class="k"><%:结束IP%></label>
+                            <span class="v">
+                                <span class="ipprefix">192.168.31.</span><input type="text" class="ipt-text iplimit" name="end" id="endip" reqMsg="<%:结束IP%>" datatype="nrange-3" fromNEl="startip"  minValue="2" maxValue="254" style="width:128px"  maxlength="3">
+                            </span>
+                            <em class="t"></em>
+                        </div>
+                        <div class="form-item">
+                            <label class="k"><%:租约(分)%></label>
+                            <span class="v">
+                                <input type="text" name="leasetime" class="ipt-text" maxlength="6" reqMsg="<%:租约%>" datatype="n-4" minValue="2" maxValue="2880">
+                            </span>
+                            <em class="t"></em>
+                        </div>
+                        <div class="form-item">
+                            <label class="k"><%:DNS1%></label>
+                            <span class="v"><input type="text" name="dns1" class="ipt-text" maxlength="15" datatype="ipaddr"></span>
+                            <em class="t"></em>
+                        </div>
+                        <div class="form-item">
+                            <label class="k"><%:DNS2%></label>
+                            <span class="v"><input type="text" name="dns2" class="ipt-text" maxlength="15" datatype="ipaddr"></span>
+                            <em class="t"></em>
+                        </div>
+                        <div class="form-item">
+                            <label class="k"><%:默认网关%></label>
+                            <span class="v"><input type="text" name="router" class="ipt-text" maxlength="15" datatype="ipaddr"></span>
+                            <em class="t"></em>
+                        </div>
+                    </div>
+                    <div class="form-contral">
+                        <button class="btn btn-primary btn-l hidden" type="submit" id="btnDhcpSubmit"><span><%:保存%></span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+        <div class="mod-set mod-lanip" id="lanIp">
+            <div class="hd">
+                <h3><%:局域网IP地址%></h3>
+            </div>
+            <div class="bd">
+                <form name="ipaddr" id="ipaddr" action="#" class="form form-lanip">
+                    <input type="hidden" name="old_ip">
+                    <div class="form-item">
+                        <label class="k"><%:局域网IP%></label>
+                        <span class="v"><input type="text" name="ip" class="ipt-text" maxlength="15" reqMsg="<%:局域网IP%>" datatype="ipaddr" id="checkIp"></span>
+                        <span class="t tip" style="display:none;color: #c00;background: #fff2f5;"><%:IP地址由4个0~255 之间的数字组成，数字之间用点区隔%></span>
+                        <em class="t"></em>
+                    </div>
+                    <div class="form-contral">
+                        <button type="submit" id="btnLanipSubmit" class="btn btn-primary btn-l hidden"><span><%:保存%></span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <%include("web/setting/dhcp_ip_mac")%>
+    </div>
+
+    <%include("web/inc/footer")%>
+
+</div>
+
+<%include("web/inc/reboot.js")%>
+<script>
+(function(){   
+    var ajaxcount = 0,
+        ajaxall = 2,
+        dhcpOldval = {},
+        mask = '255.255.255.0';
+
+    $.sub( 'ajaxdone', function(){
+        ajaxcount ++;
+        if ( ajaxcount >= ajaxall ) {
+            $.formInit();
+        }
+    } );
+
+    $.sub( 'dhcp:get', function( evt, data ){
+        var requestURL = '<%=luci.dispatcher.build_url("api", "xqnetwork","lan_dhcp")%>',
+            requestData = {},
+            ipSplit = function( ip ) {
+                var ipSplit=[];
+                var strs = ip.split(".");
+                for (var i=0;i<strs.length-1;i++ )
+                {
+                    ipSplit.push(strs[i]);
+                }
+                return ipSplit.join('.') + '.';
+            };
+
+        $.getJSON( requestURL, requestData, function( rsp ){
+            if(rsp.code == 0){
+                var info = rsp.info,
+                    ip = info.lanIp[0].ip,
+                    ipPrefix = ipSplit( ip ),
+                    ignore = info.ignore,
+                    start = info.start,
+                    limit = info.limit,
+                    dns1 = info.dns1 ? info.dns1 : '',
+                    dns2 = info.dns2 ? info.dns2 : '',
+                    router = info.router ? info.router : '',
+                    leasetime = info.leasetime,
+                    leasetimeNum = info.leasetimeNum,
+                    leasetimeUnit = info.leasetimeUnit,
+                    _leasetimeUnit = leasetimeUnit === 'h'? 60 : 1,
+                    _leasetime = leasetimeNum * _leasetimeUnit,
+                    end = parseInt( info.start, 10 ) + parseInt( info.limit, 10 ) - 1;
+                $( '.ipprefix' ).html( ipPrefix );
+                $( 'input[name="start"]' ).val( start );
+                $( 'input[name="start"]' ).attr('oldData',start)
+                $( 'input[name="end"]' ).val( end );
+                $( 'input[name="end"]' ).attr('oldData',end)
+                $( 'input[name="leasetime"]' ).val( _leasetime );
+                $( 'input[name="ignore"]' ).val( ignore );
+                $( 'input[name="dns1"]' ).val( dns1 );
+                $( 'input[name="dns2"]' ).val( dns2 );
+                $( 'input[name="router"]' ).val( router );
+                dhcpOldval['start'] = start;
+                dhcpOldval['end'] = end;
+                dhcpOldval['leasetime'] = _leasetime;
+                dhcpOldval['ignore'] = ignore;
+
+                if ( ignore === '1' ){
+                    //close
+                    $.pub('dhcp:switch', {'cmd': 'close'});
+                } else {
+                    $.pub('dhcp:switch', {'cmd': 'open'});
+                }
+
+                // $( 'input.iplimit' ).on( 'keydown', function(e){
+                //     var lanip = ipPrefix.replace( '.', '\\.' ),
+                //         re = new RegExp( '^'+ ipPrefix +'\\.\\d{1,3}$' );
+                //     if ( e.keyCode === 46 || e.keyCode === 8 ) {
+                //         if ( !re.test( this.value ) ) {
+                //             return false
+                //         }
+                //     }
+
+                // } );
+
+            } else {
+                $.alert( rsp.msg, function(){
+                    location.reload( true );
+                } );
+            }
+
+            $.pub( 'ajaxdone' );
+
+        });
+    } );
+
+    $.sub( 'lanip:get', function(){
+        var requestURL = '<%=luci.dispatcher.build_url("api", "xqnetwork","lan_info")%>',
+            requestData = {};
+        $.getJSON( requestURL, requestData, function( rsp ){
+            if( rsp.code === 0 ){
+                var ip = rsp.info.ipv4[0]['ip'];
+                $( 'input[name=ip]' ).val( ip );
+                $( 'input[name=old_ip]' ).val( ip );
+                mask = rsp.info.ipv4[0]['mask']
+            } else {
+                $.alert( rsp.msg, function(){
+                    location.reload( true );
+                } );
+            }
+
+            $.pub( 'ajaxdone' );
+
+        });
+    } );
+
+    $.sub( 'dhcp:switch', function( evt, data ){
+        var btnClass = data.cmd === 'open' ? 'btn-switch-on' : 'btn-switch-off',
+            $ignore = $( 'input[name="ignore"]' );
+
+        $( '#dhcpswitch' )[0].className = 'btn-switch ' + btnClass;
+
+        if ( data.cmd === 'open' ) {
+            $ignore.val( 0 );
+            $( '#lanDhcp .set' ).fadeIn();
+        }else{
+            $( '#lanDhcp .set' ).fadeOut();
+            $ignore.val( 1 );
+        }
+
+    } );
+
+    $.sub( 'addEvent', function( evt, data ){
+        $('.help .ico').on('click', function(){
+            $.pub('dhcp:showHelp');
+        });
+        $('.help-close').on('click', function(){
+            $.pub('dhcp:hideHelp');
+        });
+        // switch
+        $( '#dhcpswitch' ).click(function( e ){
+            e.preventDefault();
+            var cmd = $( this ).hasClass( 'btn-switch-on' ) ? 'close' : 'open';
+            $.pub( 'dhcp:switch', {'cmd': cmd} );
+        });
+
+        // submit
+        $( '#netDhcp' ).submit(function( e ){
+            e.preventDefault();
+            var formObj = this,
+                formName = formObj.name,
+                action = formObj.action,
+                $ignore = $( 'input[name=ignore]' ),
+                ignore = $ignore.val(),
+                validator = Valid.checkAll(formObj);
+
+            if ( ignore === '1' ) {
+                validator = true;
+            }
+
+            if ( validator ) {
+                var getIpLast = function( ip ){
+                        return parseInt( ip.split('.')[3], 10 );
+                    },
+                    leasetime = parseInt( $( 'input[name=leasetime]' ).val(), 10 ),
+                    start = $( 'input[name=start]' ).val(),
+                    end = $( 'input[name=end]' ).val(),
+                    dns1 = $( 'input[name=dns1]' ).val(),
+                    dns2 = $( 'input[name=dns2]' ).val(),
+                    router = $( 'input[name=router]' ).val(),
+                    leasetime_num,
+                    leasetime_unit,
+                    requestData,
+                    requestURL = '<%=luci.dispatcher.build_url("api", "xqnetwork","set_lan_dhcp")%>';
+                leasetime_unit = 'm';
+                leasetime_num = leasetime;
+
+                requestData = {
+                    leasetime: leasetime_num + leasetime_unit,
+                    start: start,
+                    end: end,
+                    ignore: ignore,
+                    dns1:dns1,
+                    dns2:dns2,
+                    router:router
+                };
+
+                if ( ignore === '1' ) {
+                    requestData = {
+                        ignore: ignore
+                    };
+                }
+
+                $.confirm('<%:此操作需要重启才能生效，是否提交?%>', function(){
+                    $.pub( 'wait', {id: '#btnDhcpSubmit'} );
+                    $.getJSON( requestURL, requestData, function( rsp ){
+                        if( rsp.code === 0 ){
+                            rebootWait({
+                                action: '<%:重启路由器%>',
+                                refresh: true
+                            });
+                        } else {
+                            $.alert( rsp.msg );
+                        }
+                        $.pub( 'done', {id: '#btnDhcpSubmit'} );
+                    });
+                });
+            }
+        });
+        // lanip
+        $( '#ipaddr' ).on( 'submit', function( e ){
+            e.preventDefault();
+            var formObj = this,
+                formName = formObj.name,
+                ip = $.trim( $('input[name=ip]', formObj).val() ),
+                oldIp = $.trim( $('input[name=old_ip]', formObj).val() ),
+                validator =  Valid.checkAll(formObj);
+            if ( validator ) {
+                var requestURL = '<%=luci.dispatcher.build_url("api", "xqnetwork","set_lan_ip")%>',
+                    requestData = {
+                        ip: ip
+                    };
+                $.confirm('<%:此操作需要重启才能生效，是否提交?%>', function(){
+                    $.pub( 'wait', {id: '#btnLanipSubmit'} );
+                    $.getJSON( requestURL, requestData, function( rsp ){
+                        if( rsp.code === 0 ){
+                            var ip = rsp.ip;
+                            rebootWait( {
+                                lanIp : ip,
+                                action : '<%:重启路由器%>',
+                                refresh : true
+                            } );
+                        } else {
+                            $.alert( rsp.msg );
+                        }
+                        $.pub( 'done', {id: '#btnLanipSubmit'} );
+                    });
+                });
+            }
+        } );
+
+
+
+        function onControlFocus() {
+            $(this).parents('form').find('.btn-primary').removeClass('hidden');
+        };
+        //解决全选输入不显示保存按钮
+        // $("#checkIp").on('input',function(){
+        //     console.log("1");              
+        //     })
+        $("#checkIp").on('focus',function(){            
+            $(this).parents('form').find('.btn-primary').removeClass('hidden');
+        })       
+
+
+
+        $('#netDhcp, #ipaddr , #gateway_ipaddr, #dns_ipaddr').delegate('input[type=text], input[type=checkbox], input[type=radio]', 'click', onControlFocus);
+
+        $('#dhcpswitch').on('click', function onDhcpswitchFocus() {
+            $('#netDhcp').find('.btn-primary').removeClass('hidden');
+        });
+        //判断ip地址
+        $('#checkIp').on('input',function(){
+            var ipReg = /^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})$/.test($(this).val())
+            var ip_check = $(this).val().split('.')
+            var mask_check = mask.split('.')
+            var newMask = []
+            var indexArr = []
+            var resArr = []
+            var isOk = true
+            for(var i = 0; i < mask_check.length; i++){
+                var c = mask_check[i] == '255' ? 0 : 255
+                newMask.push(c)
+                //记录为0的下标
+                if(mask_check[i] == 0){
+                    indexArr.push(i)
+                }
+            }
+            for(var j = 0; j < indexArr.length; j++){
+                var d = ip_check[indexArr[j]] & newMask[indexArr[j]]
+                // console.log('ip',ip_check[indexArr[j]])
+                // console.log('mask',newMask[indexArr[j]])
+                if(d == 0 || d == 255){
+                    resArr.push(d)
+                }
+            }
+            var testAdd = 0
+            var testVal = resArr[0]
+            for(var x = 0; x < resArr.length; x++){
+                if(resArr[x] == testVal){
+                    testAdd++
+                }
+            }
+
+            if(resArr.length > 0 && testAdd == indexArr.length && ipReg){
+                isOk = false
+            }
+            if(isOk){
+                $('#ipaddr').find('.tip').css('display','none')
+                $('#btnLanipSubmit').removeAttr('disabled')
+            }else{
+                $('#ipaddr').find('.tip').css('display','block')
+                $('#btnLanipSubmit').attr('disabled','true')
+            }
+        })
+    } );
+    $.sub('dhcp:showHelp', function(evt, data){
+        $('#helpArrow').show();
+        $('#helpSection').show();
+    });
+    $.sub('dhcp:hideHelp', function(evt, data){
+        $('#helpArrow').hide();
+        $('#helpSection').hide();
+    });
+}());
+
+$(function(){
+    $.pub( 'dhcp:get' );
+    $.pub( 'lanip:get' );
+    $.pub( 'addEvent' );
+});
+</script>
+</body>
+</html>

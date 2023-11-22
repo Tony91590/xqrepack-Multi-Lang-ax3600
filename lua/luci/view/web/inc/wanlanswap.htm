@@ -1,0 +1,8 @@
+<%
+local xqlanwanutil = require "xiaoqiang.util.XQLanWanUtil"
+local mode = xqlanwanutil.getWanLanMode()
+%>
+<select name="modeselect" id="modeselect" class="beautify" >
+<option value="2.5G" <%if(mode == "2.5G") then%>selected="selected"<%end%> ><%:2.5G网口（推荐）%></option>
+<option value="1G" <%if(mode == "1G") then%>selected="selected"<%end%> ><%:1G网口%></option>
+</select>
