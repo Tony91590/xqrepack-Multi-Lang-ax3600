@@ -120,6 +120,8 @@ rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm.orig
 rm -f $FSDIR/etc/config/xqled.orig
 rm -f $FSDIR/lib/preinit/90_mount_bind_etc.orig
 chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
+chmod 755 $FSDIR/etc/uci-defaults/luci-i18n-russian
+chmod 755 $FSDIR/etc/uci-defaults/luci-i18n-english
 
 die()
 {
