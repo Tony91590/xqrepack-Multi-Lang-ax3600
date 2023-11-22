@@ -3,4 +3,7 @@
 nvram set CountryCode=EU
 nvram commit
 
+uci set luci.main.lang=en
+uci commit luci
+
 exit 0
