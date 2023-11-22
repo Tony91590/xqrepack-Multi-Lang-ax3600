@@ -1,2 +1,0 @@
-usr/lib/lua/luci/i18n
-/base.en.lmo
