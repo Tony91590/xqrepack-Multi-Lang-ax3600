@@ -120,7 +120,6 @@ find patcho -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
 find patcho -type f -name \*.orig -delete
 
 rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
-rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/agreement_US_inter.htm.orig
 rm -f $FSDIR/etc/config/xqled.orig
 rm -f $FSDIR/lib/preinit/90_mount_bind_etc.orig
 chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
