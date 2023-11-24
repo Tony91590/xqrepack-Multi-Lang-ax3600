@@ -129,6 +129,7 @@ sed -i "s/option CHANNEL 'stable'/option CHANNEL 'release'/g" $FSDIR/usr/share/x
 sed -i 's@192.168.31.1@10.0.0.1@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt
 sed -i 's@192.168.31.100@10.0.0.100@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt
 sed -i 's@192.168.31.1@10.0.0.1@g' $FSDIR/etc/config/network
+sed -i 's@miwifi_service_ips@#miwifi_service_ips@g' $FSDIR/usr/share/messaging/messaging.conf
 
 die()
 {
