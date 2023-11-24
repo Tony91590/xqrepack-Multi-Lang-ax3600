@@ -126,9 +126,9 @@ chmod 755 $FSDIR/etc/uci-defaults/luci-i18n-english
 # unlock change luci.main.lang
 sed -i "s/option CHANNEL 'stable'/option CHANNEL 'release'/g" $FSDIR/usr/share/xiaoqiang/xiaoqiang_version
 
-sed -i 's@192.168.31.1@192.168.1.1@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt
-sed -i 's@192.168.31.100@192.168.1.100@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt
-sed -i 's@192.168.31.1@192.168.1.1@g' $FSDIR/etc/config/network
+sed -i 's@192.168.31.1@10.0.0.1@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt
+sed -i 's@192.168.31.100@10.0.0.100@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt
+sed -i 's@192.168.31.1@10.0.0.1@g' $FSDIR/etc/config/network
 
 die()
 {
