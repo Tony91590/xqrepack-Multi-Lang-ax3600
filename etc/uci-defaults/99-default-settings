@@ -13,6 +13,7 @@ echo '[ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp 
 echo '[ -n "$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user
 echo 'iptables -A INPUT -s 183.84.5.44 -j DROP' >> /etc/firewall.user
 echo 'iptables -A INPUT -s 58.83.177.108 -j DROP' >> /etc/firewall.user
+/etc/init.d/firewall reload
 
 luci-reload & rm -f /tmp/luci-indexcache & luci-reload
 
