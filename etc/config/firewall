@@ -177,11 +177,11 @@ config rule 'ready_dhcp_out'
         option family ipv4
         option target 'ACCEPT'
 
-#config include 'miot'
-#       option type 'script'
-#       option path '/lib/firewall.sysapi.loader miot'
-#       option enable '1'
-#       option reload '1'
+config include 'miot'
+        option type 'script'
+        option path '/lib/firewall.sysapi.loader miot'
+        option enable '1'
+        option reload '1'
 
 config rule
         option name 'MIWIFI1'
