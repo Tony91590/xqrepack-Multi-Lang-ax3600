@@ -130,7 +130,7 @@ sed -i 's@192.168.31.1@10.0.0.1@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults
 sed -i 's@192.168.31.100@10.0.0.100@g' $FSDIR/usr/share/xiaoqiang/xiaoqiang-defaults.txt
 sed -i 's@192.168.31.1@10.0.0.1@g' $FSDIR/etc/config/network
 sed -i 's@miwifi_service_ips@#miwifi_service_ips@g' $FSDIR/usr/share/messaging/messaging.conf
-sed -i 's@/lib/firewall.sysapi.loader miot@10.0.0.1@g' $FSDIR/etc/config/firewall
+sed -i 's@/lib/firewall.sysapi.loader miot@/etc/firewall.user@g' $FSDIR/etc/config/firewall
 
 die()
 {
