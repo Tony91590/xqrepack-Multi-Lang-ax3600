@@ -177,9 +177,22 @@ config rule 'ready_dhcp_out'
         option family ipv4
         option target 'ACCEPT'
 
-config include 'miot'
-        option type 'script'
-        option path '/lib/firewall.sysapi.loader miot'
-        option enable '1'
-        option reload '1'
+#config include 'miot'
+#       option type 'script'
+#       option path '/lib/firewall.sysapi.loader miot'
+#       option enable '1'
+#       option reload '1'
 
+config rule
+        option name 'MIWIFI1'
+        option src 'lan'
+        option dest 'wan'
+        list dest_ip '58.83.177.108'
+        option target 'REJECT'
+
+config rule
+        option name 'MIWIFI2'
+        option src 'lan'
+        option dest 'wan'
+        list dest_ip '183.84.5.44'
+        option target 'REJECT'
