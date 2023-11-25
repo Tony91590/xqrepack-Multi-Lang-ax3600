@@ -178,7 +178,7 @@ config rule 'ready_dhcp_out'
         option target 'ACCEPT'
 
 config include 'miot'
-       option type 'script'
+        option type 'script'
         option path '/lib/firewall.sysapi.loader miot'
         option enable '1'
         option reload '1'
