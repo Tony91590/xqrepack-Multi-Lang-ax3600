@@ -29,8 +29,8 @@ unsquashfs -f -d "$FSDIR" "$IMG"
 
 >&2 echo "patching squashfs..."
 
-sed -i "s/option CHANNEL 'stable'/option CHANNEL 'release'/g" $FSDIR/usr/share/xiaoqiang/xiaoqiang_version
-sed -i "s@1.0.41@(1.0.41)@g" $FSDIR/usr/share/xiaoqiang/xiaoqiang_version
+sed -i "s/option CHANNEL 'release'/option CHANNEL 'stable'/g" $FSDIR/usr/share/xiaoqiang/xiaoqiang_version
+#sed -i "s@1.0.41@(1.0.41)@g" $FSDIR/usr/share/xiaoqiang/xiaoqiang_version
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
