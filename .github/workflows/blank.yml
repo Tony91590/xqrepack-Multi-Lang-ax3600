@@ -30,11 +30,6 @@ jobs:
               
     - uses: actions/upload-artifact@v3
       with:
-        name: miwifi_ra72_firmware_98605_1.0.55+SSH
-        path: miwifi_ra72_firmware_98605_1.0.55+SSH.bin
-              
-    - uses: actions/upload-artifact@v3
-      with:
         name: miwifi_ra72_firmware_b0f85_1.0.51+SSH
         path: miwifi_ra72_firmware_b0f85_1.0.51+SSH.bin
     
