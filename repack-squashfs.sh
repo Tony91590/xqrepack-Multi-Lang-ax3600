@@ -33,6 +33,8 @@ unsquashfs -f -d "$FSDIR" "$IMG"
 sed -i 's/channel=.*/channel=release2/' "$FSDIR/etc/init.d/dropbear"
 sed -i 's/flg_ssh=.*/flg_ssh=1/' "$FSDIR/etc/init.d/dropbear"
 
+sed -i "s/option CHANNEL 'stable'/option CHANNEL 'release'/g" $FSDIR/usr/share/xiaoqiang/xiaoqiang_version
+
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
 mksquashfs "$FSDIR" "$IMG.new" -comp xz -b 256K -no-xattrs
