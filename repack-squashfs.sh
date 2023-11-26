@@ -4,7 +4,7 @@
 # removes checks for release channel before starting dropbear
 #
 # 2020.07.20  darell tan
-# 
+#ok 
 
 set -e
 
