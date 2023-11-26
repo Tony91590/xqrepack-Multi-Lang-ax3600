@@ -30,6 +30,9 @@ unsquashfs -f -d "$FSDIR" "$IMG"
 
 sed -i "s/option CHANNEL 'release'/option CHANNEL 'stable'/g" $FSDIR/usr/share/xiaoqiang/xiaoqiang_version
 
+# firmware wifi update 
+cp -R lib/* "$FSDIR/lib/"
+
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
 mksquashfs "$FSDIR" "$IMG.new" -comp xz -b 256K -no-xattrs
