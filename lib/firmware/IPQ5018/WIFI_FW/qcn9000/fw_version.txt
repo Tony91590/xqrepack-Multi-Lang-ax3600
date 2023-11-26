@@ -1,1 +1,1 @@
-lib/firmware/IPQ5018/WIFI_FW/qcn9000/fw_version.txt
+WLAN.HK.2.4-02098-QCAHKSWPL_SILICONZ-1.397702.4 v1
