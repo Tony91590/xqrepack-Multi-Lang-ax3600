@@ -98,6 +98,12 @@ done
 # as a last-ditch effort, change the *.miwifi.com hostnames to localhost
 sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
+# apply patch from xqrepack repository
+find patcho -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
+find patcho -type f -name \*.orig -delete
+
+rm -f $FSDIR/etc/config/xqled.orig
+
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
 mksquashfs "$FSDIR" "$IMG.new" -comp xz -b 256K -no-xattrs
