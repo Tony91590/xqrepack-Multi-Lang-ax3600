@@ -1,11 +1,15 @@
 #!/bin/sh
 
-nvram set CountryCode=EU
-nvram commit
+# include custom /etc/firewall.user rules
+uci set firewall.firewall_user=include
+uci set firewall.firewall_user.path='/etc/firewall.user'
+uci commit
 
-uci set luci.main.lang=en
-uci commit luci
-
-luci-reload & rm -f /tmp/luci-indexcache & luci-reload
+cat  << "EOF" >> /etc/firewall.user
+### Delete the ip6tables rule which forwards WAN -> LAN. It will expose LAN to the global (internet)
+ip6tables -D zone_wan_dest_REJECT -i eth1 -j ACCEPT
+# need to restart odhcpd for IPv6 to work
+/etc/init.d/odhcpd restart
+EOF
 
 exit 0
