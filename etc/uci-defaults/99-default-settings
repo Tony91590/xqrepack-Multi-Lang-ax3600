@@ -5,11 +5,15 @@ uci set firewall.firewall_user=include
 uci set firewall.firewall_user.path='/etc/firewall.user'
 uci commit
 
-cat  << "EOF" >> /etc/firewall.user
-### Delete the ip6tables rule which forwards WAN -> LAN. It will expose LAN to the global (internet)
-ip6tables -D zone_wan_dest_REJECT -i eth1 -j ACCEPT
-# need to restart odhcpd for IPv6 to work
-/etc/init.d/odhcpd restart
+# add firewall rule to make fullcone NAT
+cat >>/etc/firewall.user <<EOF
+iptables -t nat -I zone_wan_prerouting -j FULLCONENAT
+iptables -t nat -I zone_wan_postrouting -j FULLCONENAT
 EOF
+
+# make /etc/firewall.user survive firewall reload
+uci set firewall.@include[0].reload=1
+uci commit firewall
+/etc/init.d/firewall reload
 
 exit 0
