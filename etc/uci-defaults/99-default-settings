@@ -3,7 +3,7 @@
 # include custom /etc/firewall.user rules
 uci set firewall.firewall_user=include
 uci set firewall.firewall_user.path='/etc/firewall.user'
-uci commit
+uci commit firewall
 
 modprobe xt_FULLCONENAT
 
