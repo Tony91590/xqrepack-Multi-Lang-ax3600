@@ -5,6 +5,8 @@ uci set firewall.firewall_user=include
 uci set firewall.firewall_user.path='/etc/firewall.user'
 uci commit
 
+modprobe xt_FULLCONENAT
+
 # add firewall rule to make fullcone NAT
 cat >>/etc/firewall.user <<EOF
 iptables -t nat -I zone_wan_prerouting -j FULLCONENAT
