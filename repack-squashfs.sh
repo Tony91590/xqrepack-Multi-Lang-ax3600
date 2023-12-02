@@ -103,6 +103,7 @@ find patches -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
 find patches -type f -name \*.orig -delete
 
 rm -f $FSDIR/etc/config/xqled.orig
+chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
