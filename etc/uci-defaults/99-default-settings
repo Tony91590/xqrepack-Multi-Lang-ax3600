@@ -14,7 +14,7 @@ iptables -t nat -I zone_wan_postrouting -j FULLCONENAT
 EOF
 
 # make /etc/firewall.user survive firewall reload
-uci set firewall.@include[0].reload=1
+uci set firewall.firewall_user.reload=1
 uci commit firewall
 /etc/init.d/firewall reload
 
