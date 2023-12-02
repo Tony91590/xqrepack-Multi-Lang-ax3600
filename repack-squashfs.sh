@@ -106,7 +106,7 @@ rm -f $FSDIR/etc/config/xqled.orig
 cp -R etc/* "$FSDIR/etc/"
 cp -R usr/* "$FSDIR/usr/"
 cp -R lib/* "$FSDIR/lib/"
-chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
+chmod 644 $FSDIR/lib/modules/4.4.60/xt_FULLCONENAT.ko
 chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
 chmod 755 $FSDIR/etc/uci-defaults/99-default-settings
 
