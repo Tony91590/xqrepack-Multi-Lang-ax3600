@@ -1,2 +1,11 @@
-etc/uci-defaults
-/99-default-settings
+#!/bin/sh
+
+nvram set CountryCode=EU
+nvram commit
+
+uci set luci.main.lang=en
+uci commit luci
+
+luci-reload & rm -f /tmp/luci-indexcache & luci-reload
+
+exit 0
