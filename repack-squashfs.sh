@@ -111,7 +111,7 @@ rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/wifi.html.orig
 rm -f $FSDIR/usr/lib/lua/luci/view/web/setting/wifi.htm.orig
 rm -f $FSDIR/etc/config/xqled.orig
 
-sed -i "s/1.0.41/1.0.41-MOD/g" $FSDIR/usr/share/xiaoqiang/xiaoqiang_version
+sed -i "s/1.0.41/1.0.410/g" $FSDIR/usr/share/xiaoqiang/xiaoqiang_version
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
