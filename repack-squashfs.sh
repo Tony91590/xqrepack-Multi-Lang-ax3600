@@ -107,6 +107,7 @@ find patches -type f -name \*.orig -delete
 rm -f $FSDIR/etc/config/xqled.orig
 rm -f $FSDIR/lib/wifi/hostapd.sh.orig
 rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
+rm -f $FSDIR/etc/config/system.orig
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
