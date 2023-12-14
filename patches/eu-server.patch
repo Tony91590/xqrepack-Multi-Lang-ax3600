@@ -1,3 +1,5 @@
+--- a/lib/wifi/qcawificfg80211.sh	2021-03-22 07:59:08.000000000 +0100
++++ b/lib/wifi/qcawificfg80211.sh	2022-12-15 19:52:58.024247590
 @@ -4,8 +4,8 @@
  	option log_size	64
 
