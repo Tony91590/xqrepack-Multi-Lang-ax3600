@@ -18,4 +18,5 @@
 -	list server '3.asia.pool.ntp.org'
 -	list server '0.asia.pool.ntp.org'
 -	list server '0.cn.pool.ntp.org'
- 	option enabled 1
+	option enabled 1
+	option enable_server 0
