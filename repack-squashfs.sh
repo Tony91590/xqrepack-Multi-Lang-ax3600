@@ -109,7 +109,7 @@ chown root:root "$FSDIR/sbin/xqflash"
 # as a last-ditch effort, change the *.miwifi.com hostnames to localhost
 #sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
-cp -R lib/* "$FSDIR/lib/"
+#cp -R lib/* "$FSDIR/lib/"
 cp -R usr/* "$FSDIR/usr/"
 
 die()
