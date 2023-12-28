@@ -9,8 +9,8 @@ set -e
 
 KERNEL=$1
 ROOTFS=$2
-ROOTFS_DATA=$4
-OUTPUT=$3
+ROOTFS_DATA=$3
+OUTPUT=r3600-raw-img.bin
 
 # check for ubinize
 ubinize -V >/dev/null || { echo "need ubinize, from mtd-utils maybe?"; exit 1; }
@@ -59,3 +59,4 @@ CFGEND2
 ubinize -m 2048 -p 128KiB -o "$OUTPUT" "$UBICFG"
 
 echo "done."
+
