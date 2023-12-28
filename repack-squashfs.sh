@@ -38,6 +38,7 @@ sed -i 's/romVersion%>/& xqrepack/;' "$FSDIR/usr/lib/lua/luci/view/web/inc/foote
 
 # stop resetting root password
 sed -i '/set_user(/a return 0' "$FSDIR/etc/init.d/system"
+sed -i 's/flg_init_pwd=.*/flg_init_pwd=0/' "$FSDIR/etc/init.d/boot_check"
 
 # make sure our backdoors are always enabled by default
 sed -i '/ssh_en/d;' "$FSDIR/usr/share/xiaoqiang/xiaoqiang-reserved.txt"
@@ -78,7 +79,6 @@ chown root:root "$FSDIR/sbin/xqflash"
 for SVC in stat_points statisticsservice \
 		datacenter \
 		smartcontroller \
-		wan_check \
 		plugincenter plugin_start_script.sh cp_preinstall_plugins.sh; do
 	rm -f $FSDIR/etc/rc.d/[SK]*$SVC
 done
@@ -88,7 +88,9 @@ for f in StatPoints mtd_crash_log logupload.lua otapredownload wanip_check.sh; d
 
 rm -f $FSDIR/etc/hotplug.d/iface/*wanip_check
 
-sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/messagingagent.sh
+for f in wan_check messagingagent.sh; do
+	sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/$f
+done
 
 # cron jobs are mostly non-OpenWRT stuff
 for f in $FSDIR/etc/crontabs/*; do
@@ -103,7 +105,10 @@ find patches -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
 find patches -type f -name \*.orig -delete
 
 rm -f $FSDIR/etc/config/xqled.orig
+rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
+rm -f $FSDIR/lib/wifi/hostapd.sh.orig
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
 mksquashfs "$FSDIR" "$IMG.new" -comp xz -b 256K -no-xattrs
+
