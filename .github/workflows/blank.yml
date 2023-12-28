@@ -19,14 +19,11 @@ jobs:
     - name: pip upgrade
       run: python -m pip install --upgrade pip
     - name: pip install
-      run: pip install python-lzo ubi_reader google_trans_new lxml
+      run: pip install python-lzo ubi_reader
     - name: make
       run: make
       
     - uses: actions/upload-artifact@v3
       with:
-        name: miwifi_ra72_firmware_98605_1.0.55+SSH+${{ env.FIRMWARE_SLUG }}
-        path: miwifi_ra72_firmware_98605_1.0.55+SSH+${{ env.FIRMWARE_SLUG }}.bin
-
-
-    
+        name: miwifi_ra72_firmware_59812_1.0.41+SSH
+        path: miwifi_ra72_firmware_59812_1.0.41+SSH.bin
