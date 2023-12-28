@@ -10,7 +10,7 @@ set -e
 KERNEL=$1
 ROOTFS=$2
 ROOTFS_DATA=$3
-OUTPUT=r3600-raw-img.bin
+OUTPUT=$4
 
 # check for ubinize
 ubinize -V >/dev/null || { echo "need ubinize, from mtd-utils maybe?"; exit 1; }
