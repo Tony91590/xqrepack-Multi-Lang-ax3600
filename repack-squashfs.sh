@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# unpack, modify and re-pack the Xiaomi R6000 firmware
+# unpack, modify and re-pack the Xiaomi R3600 firmware
 # removes checks for release channel before starting dropbear
 #
 # 2020.07.20  darell tan
@@ -9,8 +9,7 @@
 set -e
 
 IMG=$1
-ROOTPW="$PASSWORD"  # "password"
-SCRIPT_ROOT_DIR="$PWD"
+ROOTPW='$1$qtLLI4cm$c0v3yxzYPI46s28rbAYG//'  # "password"
 
 [ -e "$IMG" ] || { echo "rootfs img not found $IMG"; exit 1; }
 
@@ -19,7 +18,6 @@ command -v unsquashfs &>/dev/null || { echo "install unsquashfs"; exit 1; }
 mksquashfs -version >/dev/null || { echo "install mksquashfs"; exit 1; }
 
 FSDIR=`mktemp -d /tmp/resquash-rootfs.XXXXX`
-echo "FSDIR: $FSDIR"
 trap "rm -rf $FSDIR" EXIT
 
 # test mknod privileges
@@ -28,7 +26,6 @@ rm -f "$FSDIR/foo"
 
 >&2 echo "unpacking squashfs..."
 unsquashfs -f -d "$FSDIR" "$IMG"
-###############################################################################
 
 >&2 echo "patching squashfs..."
 
@@ -37,10 +34,11 @@ sed -i 's/channel=.*/channel=release2/' "$FSDIR/etc/init.d/dropbear"
 sed -i 's/flg_ssh=.*/flg_ssh=1/' "$FSDIR/etc/init.d/dropbear"
 
 # mark web footer so that users can confirm the right version has been flashed
-#sed -i 's/romVersion%>/& xqrepack/;' "$FSDIR/usr/lib/lua/luci/view/web/inc/footer.htm"
+sed -i 's/romVersion%>/& xqrepack/;' "$FSDIR/usr/lib/lua/luci/view/web/inc/footer.htm"
 
 # stop resetting root password
 sed -i '/set_user(/a return 0' "$FSDIR/etc/init.d/system"
+sed -i 's/flg_init_pwd=.*/flg_init_pwd=0/' "$FSDIR/etc/init.d/boot_check"
 
 # make sure our backdoors are always enabled by default
 sed -i '/ssh_en/d;' "$FSDIR/usr/share/xiaoqiang/xiaoqiang-reserved.txt"
@@ -65,17 +63,12 @@ boot_hook_add preinit_main enable_dev_access
 NVRAM
 
 # modify root password
-if [ -n "ROOTPW" ]
-then
-	sed -i "s@root:[^:]*@root:${ROOTPW}@" "$FSDIR/etc/shadow"
-else
-	echo -e "\033[0;31mROOT Password hasn't been changed!!!\033[0m\nTo modify this password please define it in ROOTPW env variable"
-fi
+sed -i "s@root:[^:]*@root:${ROOTPW}@" "$FSDIR/etc/shadow"
 
 # stop phone-home in web UI
-#cat <<JS >> "$FSDIR/www/js/miwifi-monitor.js"
-#(function(){ if (typeof window.MIWIFI_MONITOR !== "undefined") window.MIWIFI_MONITOR.log = function(a,b) {}; })();
-#JS
+cat <<JS >> "$FSDIR/www/js/miwifi-monitor.js"
+(function(){ if (typeof window.MIWIFI_MONITOR !== "undefined") window.MIWIFI_MONITOR.log = function(a,b) {}; })();
+JS
 
 # add xqflash tool into firmware for easy upgrades
 cp xqflash "$FSDIR/sbin"
@@ -83,41 +76,50 @@ chmod 0755      "$FSDIR/sbin/xqflash"
 chown root:root "$FSDIR/sbin/xqflash"
 
 # dont start crap services
-#for SVC in stat_points statisticsservice \
-#		datacenter \
-#		smartcontroller \
-#		wan_check \
-#		plugincenter plugin_start_script.sh cp_preinstall_plugins.sh; do
-#	rm -f $FSDIR/etc/rc.d/[SK]*$SVC
-#done
+for SVC in stat_points statisticsservice \
+		datacenter \
+		smartcontroller \
+		plugincenter plugin_start_script.sh cp_preinstall_plugins.sh; do
+	rm -f $FSDIR/etc/rc.d/[SK]*$SVC
+done
 
 # prevent stats phone home & auto-update
-#for f in StatPoints mtd_crash_log logupload.lua otapredownload wanip_check.sh; do > $FSDIR/usr/sbin/$f; done
+for f in StatPoints mtd_crash_log logupload.lua otapredownload wanip_check.sh; do > $FSDIR/usr/sbin/$f; done
 
-# prevent auto-update
-> $FSDIR/usr/sbin/otapredownload
+rm -f $FSDIR/etc/hotplug.d/iface/*wanip_check
 
-#rm -f $FSDIR/etc/hotplug.d/iface/*wanip_check
-
-#sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/messagingagent.sh
+for f in wan_check messagingagent.sh; do
+	sed -i '/start_service(/a return 0' $FSDIR/etc/init.d/$f
+done
 
 # cron jobs are mostly non-OpenWRT stuff
-#for f in $FSDIR/etc/crontabs/*; do
-#	sed -i 's/^/#/' $f
-#done
+for f in $FSDIR/etc/crontabs/*; do
+	sed -i 's/^/#/' $f
+done
 
 # as a last-ditch effort, change the *.miwifi.com hostnames to localhost
-#sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
+sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
-#cp -R lib/* "$FSDIR/lib/"
-cp -R usr/* "$FSDIR/usr/"
+# get hardware name
+HWNAME=`sed -n "/option\s\+HARDWARE/ s/.*'\(.*\)'/\1/g p" $FSDIR/usr/share/xiaoqiang/xiaoqiang_version`
+[ -n "$HWNAME" ] && echo "detected hw $HWNAME" || echo "[WARN] cant find hw name in firmware"
 
-die()
-{
-	echo "$1"
-	exit 1
-}
+# apply hw-specific patches
+PATCHES=
+[ -n "$HWNAME" ] && [ -d "patches-$HWNAME" ] && PATCHES=patches-$HWNAME/*.patch
+
+# generic patches
+[ -d patches ] && PATCHES="$PATCHES patches/*.patch"
+
+# apply patches
+for p in $PATCHES; do
+	>&2 echo "applying patch $p..."
+	patch -d "$FSDIR" -s -p1 < $p
+
+	[ $? -ne 0 ] && { echo "patch $p didnt apply cleanly - aborting."; exit 1; }
+done
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
 mksquashfs "$FSDIR" "$IMG.new" -comp xz -b 256K -no-xattrs
+

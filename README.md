@@ -1,25 +1,14 @@
-Multi-Lang for 1.1.19 AX3600 
+xqrepack
 =========
 
-- Multi-Lang in web interface and Time select : english french german italian portuguese russian spanish turkish OK!
-- UPDATE FIRMWARE WIFI WLAN.HK.2.3.r2-00064-QCAHKSWPL_SILICONZ-3 v2 OK!
-- Disable MIWIFI SERVICE OK!
-- LINK page luci xqrepack.com OK!
-- TX power in dBm options in web interface OK!
-
-THANK galeksandrp alllexx88 geekman
-
-xqrepack fork
-=========
-
-These scripts allow you to modify the *Xiaomi R3600* firmware image to make sure SSH and UART access is always enabled.
+These scripts allow you to modify the *Xiaomi AX3600 (R3600)* and *Xiaomi AX1800 (RM1800)* firmware image to make sure SSH and UART access is always enabled.
 
 The default root password is `password`. Please remember to login to the router and change that after the upgrade. Your router settings like IP address and SSIDs are stored in the nvram and should stay the same.
 
 ⚠ The script also tries its best to remove or disable phone-home binaries, and also the smart controller (AIoT) parts, leaving you with a (close to) OpenWRT router that you can configure via UCI or `/etc/config`.
 Between preserving stock functionality and privacy concerns, I would err on the side of caution and rather that some functionality be sacrificed for a router that I have more confidence to connect to the Internet.
 
-Note that in order to get SSH access to the router initially, you need to [downgrade to version 1.0.17 and exploit it first](https://forum.openwrt.org/t/adding-openwrt-support-for-ax3600/55049/123).
+Note that in order to get SSH access to the router initially, you need to [downgrade the AX3600 to version 1.0.17 and exploit it first](https://forum.openwrt.org/t/adding-openwrt-support-for-ax3600/55049/123) / [downgrade the AX1800 to version 1.0.378 (or below) and exploit it first](https://forum.openwrt.org/t/adding-openwrt-support-for-ax3600/55049/123).
 Once you have SSH, you can use this repacking method to maintain SSH access for newer versions.
 
 Requirements
@@ -35,19 +24,40 @@ You will need to install the following tools:
 Usage
 =======
 
-1. Download the firmware(s) from miwifi.com.
-   It should be something like `miwifi_r3600_firmware_xxx_yyy.bin`.
-   Put it/them to `orig-firmwares` directory.
+1. Download the firmware from miwifi.com.
+   It should be something like `miwifi_r3600_firmware_xxxx_y.y.yyy.bin` or `miwifi_rm1800_firmware_xxxx_y.y.yyy.bin`.
 
-2. Run `make` to build archives of patched firmwares.
-   Parallel build not supported!
-   This will build patched images with following naming convention:
-   - `<firmware_image_name>+SSH.zip`: patched with original `repack-squashfs.sh` script, which enables SSH and does its best to disable Xiaomi functions/bloatware
-   - `<firmware_image_name>+SSH+MI.zip`: enables SSH, but leaves Xiaomi functions intact, only ota predownload is disabled
-   - `<firmware_image_name>+SSH+opt.zip`, `<firmware_image_name>+SSH+MI+opt.zip`: same as the respective two above, with additionally `/opt` directory created
+2. Use the `ubireader_extract_images` utility from ubi_reader to unpack the UBI image from the firmware.
+   Technically there's junk at the front, but the script will ignore it:
 
-3. After extracting a generated archive of your liking, you will get `r3600-raw-img.bin` file.
-   Flash this file directly into the router using SSH.
+        ubireader_extract_images -w miwifi_r3600_firmware_xxx_yyy.bin
+
+    The unpacked files will be in the `ubifs-root/miwifi_r3600_firmware...` directory.
+
+3. Patch the rootfs using the `repack-squashfs.sh` script:
+
+        fakeroot -- ./repack-squashfs.sh ubifs-root/miwifi_r3600_firmware.../img-264..._vol-ubi_rootfs.ubifs
+
+   The script will create a new	squashfs image with the `.new` suffix.
+   You will need `fakeroot` in order to create files and devices as `root`. You _could_ also run this script as `root`, but please don't.
+
+4. Recombine the kernel and patched rootfs with `ubinize.sh`:
+
+   for R3600:
+   
+        ./ubinize.sh ubifs-root/miwifi_r3600_firmware.../...kernel.ubifs \
+                     ubifs-root/miwifi_r3600_firmware.../...ubi_rootfs.ubifs.new
+
+   for RM1800:
+   
+        ./ubinize.sh ubifs-root/miwifi_rm1800_firmware.../...kernel.ubifs \
+                     ubifs-root/miwifi_rm1800_firmware.../...ubi_rootfs.ubifs.new \
+                     --data
+
+   Note the use of the `.ubifs.new` file.
+   The combined output file will be `r3600-raw-img.bin`, even if you are using a rm1800 image!
+
+5. Flash this file directly into the router using SSH.
    You cannot use the web UI because this is a raw image, and more importantly has no signature.
 
    If you are using a recently xqrepack'ed firmware, you can use the `xqflash` utility on the router to flash an update image:
@@ -99,7 +109,7 @@ License
 
 **xqrepack** is licensed under **the 3-clause ("modified") BSD License**.
 
-Copyright (C) 2020-2021 Darell Tan, 2021 Alex Potapenko
+Copyright (C) 2020-2021 Darell Tan
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
