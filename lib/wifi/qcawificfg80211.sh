@@ -1734,6 +1734,7 @@ enable_qcawificfg80211() {
 	local hk_ol_num=0
 	local edge_ch_dep_applicable
 	local hwcaps
+	local bd_country_code=`bdata get CountryCode`
 	local board_name
 	[ -f /tmp/sysinfo/board_name ] && {
 		board_name=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print$2}')
