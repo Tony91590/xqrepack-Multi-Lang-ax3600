@@ -4369,7 +4369,7 @@ enable_vifs_qcawificfg80211() {
 		local ifname_5G=$(uci -q get misc.wireless.ifname_5G)
 		if [ -n "$mesh_role" ] && [ "CAP" = "$mesh_role" -o "RE" = "$mesh_role" ]; then
 			if [ "$ifname" = "$ifname_5G" -o "$ifname" = "$backhaul_5g_ap_iface" ]; then
-				wifitool "$ifname" block_acs_channel "52,56,60,64,149,153,157,161,165"
+				wifitool "$ifname" block_acs_channel "149,153,157,161,165"
 			fi
 		fi
 
