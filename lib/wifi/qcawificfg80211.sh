@@ -4303,55 +4303,56 @@ enable_vifs_qcawificfg80211() {
 			iwpriv "$ifname" vhtsubfee 0
 			iwpriv "$ifname" he_subfee 0
 		else
-			if [ "$channel" -lt 36 ]; then
-                        	max_power=23
-			fi
-   			if [ "$channel" -lt 40 ]; then
-                        	max_power=23
-			fi
-   			if [ "$channel" -lt 44 ]; then
-                        	max_power=23
-			fi
-   			if [ "$channel" -lt 48 ]; then
-                        	max_power=23
-			fi
-   			if [ "$channel" -lt 52 ]; then
-                        	max_power=23
-			fi
-   			if [ "$channel" -lt 56 ]; then
-                        	max_power=23
-			fi
-   			if [ "$channel" -lt 60 ]; then
-                        	max_power=23
-			fi
-   			if [ "$channel" -lt 64 ]; then
-                        	max_power=23
-			fi
-			if [ "$channel" -lt 100 ]; then
-                        	max_power=24
-			fi
-   			if [ "$channel" -lt 104 ]; then
-                        	max_power=24
-			fi
-   			if [ "$channel" -lt 108 ]; then
-                        	max_power=24
-			fi
-   			if [ "$channel" -lt 112 ]; then
-                        	max_power=24
-			fi
-   			if [ "$channel" -lt 116 ]; then
-                        	max_power=24
-			fi
-   			if [ "$channel" -lt 120 ]; then
-                        	max_power=24
-			fi
-			if [ "$channel" -lt 124 ]; then
-                        	max_power=24
-			fi
-   			if [ "$channel" -lt 128 ]; then
-                        	max_power=24
-			fi			
-                max_power=30
+			max_power=30
+		fi
+		if [ "$channel" -lt 36 ]; then
+                        max_power=23
+		fi
+   		if [ "$channel" -lt 40 ]; then
+                        max_power=23
+		fi
+   		if [ "$channel" -lt 44 ]; then
+                        max_power=23
+		fi
+   		if [ "$channel" -lt 48 ]; then
+                        max_power=23
+		fi
+   		if [ "$channel" -lt 52 ]; then
+                        max_power=23
+		fi
+   		if [ "$channel" -lt 56 ]; then
+                        max_power=23
+		fi
+   		if [ "$channel" -lt 60 ]; then
+                        max_power=23
+		fi
+   		if [ "$channel" -lt 64 ]; then
+                        max_power=23
+		fi
+		if [ "$channel" -lt 100 ]; then
+                        max_power=24
+		fi
+   		if [ "$channel" -lt 104 ]; then
+                        max_power=24
+		fi
+   		if [ "$channel" -lt 108 ]; then
+                        max_power=24
+		fi
+   		if [ "$channel" -lt 112 ]; then
+                        max_power=24
+		fi
+   		if [ "$channel" -lt 116 ]; then
+                        max_power=24
+		fi
+   		if [ "$channel" -lt 120 ]; then
+                        max_power=24
+		fi
+		if [ "$channel" -lt 124 ]; then
+                        max_power=24
+		fi
+   		if [ "$channel" -lt 128 ]; then
+                        max_power=24
+		fi
 		config_get txpwr "$device" txpwr
 		if [ "$txpwr" = "mid" ]; then
 			txpower=`expr $max_power - 1`
