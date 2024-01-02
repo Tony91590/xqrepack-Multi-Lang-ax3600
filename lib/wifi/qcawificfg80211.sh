@@ -4306,62 +4306,19 @@ enable_vifs_qcawificfg80211() {
 		else
 			max_power=30
 		fi
-		if [ "$channel" = 36 ]; then
-                        max_power=23
-		fi
-   		if [ "$channel" = 40 ]; then
-                        max_power=23
-		fi
-   		if [ "$channel" = 44 ]; then
-                        max_power=23
-		fi
-   		if [ "$channel" = 48 ]; then
-                        max_power=23
-		fi
-   		if [ "$channel" = 52 ]; then
-                        max_power=23
-		fi
-   		if [ "$channel" = 56 ]; then
-                        max_power=23
-		fi
-   		if [ "$channel" = 60 ]; then
-                        max_power=23
-		fi
-   		if [ "$channel" = 64 ]; then
-                        max_power=23
-		fi
-		if [ "$channel" = 100 ]; then
-                        max_power=24
-		fi
-   		if [ "$channel" = 104 ]; then
-                        max_power=24
-		fi
-   		if [ "$channel" = 108 ]; then
-                        max_power=24
-		fi
-   		if [ "$channel" = 112 ]; then
-                        max_power=24
-		fi
-   		if [ "$channel" = 116 ]; then
-                        max_power=24
-		fi
-   		if [ "$channel" = 120 ]; then
-                        max_power=24
-		fi
-		if [ "$channel" = 124 ]; then
-                        max_power=24
-		fi
-   		if [ "$channel" = 128 ]; then
-                        max_power=24
-		fi
-     		if [ "$channel" = 132 ]; then
-                        max_power=24
-		fi
-		if [ "$channel" = 136 ]; then
-                        max_power=24
-		fi
-   		if [ "$channel" = 140 ]; then
-                        max_power=24
+		if [ "$bd_country_code" = "EU" ]; then
+			if [ "$bdmode" = "24G" ]; then
+				max_power=20
+			else
+				if [ "$channel" -ge 100 ]; then
+					max_power=24
+				else
+					max_power=23
+				fi
+			fi
+			if [ $ifname = "wl2" ]; then
+				max_power=13
+			fi
 		fi
 		config_get txpwr "$device" txpwr
 		if [ "$txpwr" = "mid" ]; then
