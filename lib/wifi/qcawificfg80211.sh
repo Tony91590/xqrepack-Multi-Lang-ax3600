@@ -4326,8 +4326,41 @@ enable_vifs_qcawificfg80211() {
 			fi
    			if [ "$channel" -lt 64 ]; then
                         	max_power=23
+			if [ "$channel" -lt 100 ]; then
+                        	max_power=24
+			fi
+   			if [ "$channel" -lt 104 ]; then
+                        	max_power=24
+			fi
+   			if [ "$channel" -lt 108 ]; then
+                        	max_power=24
+			fi
+   			if [ "$channel" -lt 112 ]; then
+                        	max_power=24
+			fi
+   			if [ "$channel" -lt 116 ]; then
+                        	max_power=24
+			fi
+   			if [ "$channel" -lt 120 ]; then
+                        	max_power=24
+			if [ "$channel" -lt 124 ]; then
+                        	max_power=24
+			fi
+   			if [ "$channel" -lt 128 ]; then
+                        	max_power=24
+			if [ "$channel" -lt 124 ]; then
+                        	max_power=24
+			fi
+   			if [ "$channel" -lt 104 ]; then
+                        	max_power=24
+			fi
+   			if [ "$channel" -lt 108 ]; then
+                        	max_power=24
+			fi
+   			if [ "$channel" -lt 112 ]; then
+                        	max_power=24
 			else
-				max_power=24
+				max_power=30
 			fi
 		fi
 
