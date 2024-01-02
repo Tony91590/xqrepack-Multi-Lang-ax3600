@@ -105,11 +105,13 @@ find patches -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
 find patches -type f -name \*.orig -delete
 
 rm -f $FSDIR/etc/config/xqled.orig
-rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
-rm -f $FSDIR/lib/wifi/hostapd.sh.orig
 
 cp -R lib/* "$FSDIR/lib/"
 cp -R usr/* "$FSDIR/usr/"
+
+sed -i 's/149/100/' "$FSDIR/usr/lib/lua/luci/view/web/setting/wifi.htm
+sed -i 's/149/100/' "$FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm
+sed -i 's/149/100/' "$FSDIR/usr/lib/lua/luci/view/web/inc/wifi.html
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
