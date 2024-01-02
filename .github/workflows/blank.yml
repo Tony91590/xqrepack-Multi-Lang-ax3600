@@ -27,5 +27,3 @@ jobs:
       with:
         name: miwifi_ra72_firmware_98605_1.0.55+SSH
         path: miwifi_ra72_firmware_98605_1.0.55+SSH.bin
-
-
