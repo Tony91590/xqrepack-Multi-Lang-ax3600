@@ -1,16 +1,17 @@
-name: build
+name: build xqrepack AX6000
 
-on: push
+on: 
+  repository_dispatch:
+  workflow_dispatch:
+
+# Cronjob
+  #schedule:
+    #- cron: 0 0 * * 0
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - name: Set the value
-      run: |
-        echo "FIRMWARE_SLUG=$(echo $GITHUB_REF | cut -d/ -f3)" >> $GITHUB_ENV
     - uses: actions/checkout@v3
     - name: apt update
       run: sudo apt update
@@ -22,8 +23,8 @@ jobs:
       run: pip install python-lzo ubi_reader
     - name: make
       run: make
-      
+
     - uses: actions/upload-artifact@v3
       with:
-        name: miwifi_ra72_firmware_98605_1.0.55+SSH
-        path: miwifi_ra72_firmware_98605_1.0.55+SSH.bin
+        name: miwifi_ra72_firmware_98605_1.0.55_SSH.bin
+        path: miwifi_ra72_firmware_98605_1.0.55_SSH.bin
