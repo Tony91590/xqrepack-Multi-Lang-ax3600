@@ -4327,7 +4327,7 @@ enable_vifs_qcawificfg80211() {
    			if [ "$channel" -lt 64 ]; then
                         	max_power=23
 			else
-				max_power=26
+				max_power=24
 			fi
 		fi
 
