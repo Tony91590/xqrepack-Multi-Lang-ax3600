@@ -4350,19 +4350,7 @@ enable_vifs_qcawificfg80211() {
 			fi
    			if [ "$channel" -lt 128 ]; then
                         	max_power=24
-			fi
-			if [ "$channel" -lt 124 ]; then
-                        	max_power=24
-			fi
-   			if [ "$channel" -lt 104 ]; then
-                        	max_power=24
-			fi
-   			if [ "$channel" -lt 108 ]; then
-                        	max_power=24
-			fi
-   			if [ "$channel" -lt 112 ]; then
-                        	max_power=24
-			fi
+			fi			
                 max_power=30
 		config_get txpwr "$device" txpwr
 		if [ "$txpwr" = "mid" ]; then
@@ -4382,7 +4370,7 @@ enable_vifs_qcawificfg80211() {
 
 		#need to check router bind or not
 		if [ $ifname == "wl13" ] && [ $bindstatus == 0 -o $userswitch == 0 ];then
-			hostapd_cli -i wl13 -p /var/run/hostapd-$device disable
+			hostapd_cli -il13 -p /var/run/hostapd-$device disable
 		fi
 
 		local netmode=$(uci -q get xiaoqiang.common.NETMODE)
