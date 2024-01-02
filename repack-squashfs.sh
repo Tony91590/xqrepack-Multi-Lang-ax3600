@@ -108,6 +108,9 @@ rm -f $FSDIR/etc/config/xqled.orig
 rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
 rm -f $FSDIR/lib/wifi/hostapd.sh.orig
 
+cp -R lib/* "$FSDIR/lib/"
+cp -R usr/* "$FSDIR/usr/"
+
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
 mksquashfs "$FSDIR" "$IMG.new" -comp xz -b 256K -no-xattrs
