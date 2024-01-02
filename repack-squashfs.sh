@@ -107,7 +107,6 @@ find patches -type f -name \*.orig -delete
 rm -f $FSDIR/etc/config/xqled.orig
 
 cp -R lib/* "$FSDIR/lib/"
-cp -R usr/* "$FSDIR/usr/"
 
 sed -i 's/149/100/' "$FSDIR/usr/lib/lua/luci/view/web/setting/wifi.htm"
 sed -i 's/149/100/' "$FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm"
