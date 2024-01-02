@@ -4353,6 +4353,15 @@ enable_vifs_qcawificfg80211() {
    		if [ "$channel" -lt 128 ]; then
                         max_power=24
 		fi
+     		if [ "$channel" -lt 132 ]; then
+                        max_power=24
+		fi
+		if [ "$channel" -lt 136 ]; then
+                        max_power=24
+		fi
+   		if [ "$channel" -lt 140 ]; then
+                        max_power=24
+		fi
 		config_get txpwr "$device" txpwr
 		if [ "$txpwr" = "mid" ]; then
 			txpower=`expr $max_power - 1`
