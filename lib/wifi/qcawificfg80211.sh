@@ -1734,7 +1734,6 @@ enable_qcawificfg80211() {
 	local hk_ol_num=0
 	local edge_ch_dep_applicable
 	local hwcaps
-	local bd_country_code=`bdata get CountryCode`
 	local board_name
 	[ -f /tmp/sysinfo/board_name ] && {
 		board_name=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print$2}')
@@ -4289,7 +4288,7 @@ enable_vifs_qcawificfg80211() {
 		# the latter doesn't exist
 		# for miwifi
 		if [ "$bdmode" = "24G" ]; then
-			max_power=20
+			max_power=30
 			case "$board_name" in
 			ap-mp*)
 				## IPQ5018 enable dynamic edcca
@@ -4306,20 +4305,7 @@ enable_vifs_qcawificfg80211() {
 		else
 			max_power=30
 		fi
-		if [ "$bd_country_code" = "EU" ]; then
-			if [ "$bdmode" = "24G" ]; then
-				max_power=20
-			else
-				if [ "$channel" -ge 100 ]; then
-					max_power=24
-				else
-					max_power=23
-				fi
-			fi
-			if [ $ifname = "wl2" ]; then
-				max_power=13
-			fi
-		fi
+
 		config_get txpwr "$device" txpwr
 		if [ "$txpwr" = "mid" ]; then
 			txpower=`expr $max_power - 1`
@@ -4338,27 +4324,19 @@ enable_vifs_qcawificfg80211() {
 
 		#need to check router bind or not
 		if [ $ifname == "wl13" ] && [ $bindstatus == 0 -o $userswitch == 0 ];then
-			hostapd_cli -il13 -p /var/run/hostapd-$device disable
+			hostapd_cli -i wl13 -p /var/run/hostapd-$device disable
 		fi
 
 		local netmode=$(uci -q get xiaoqiang.common.NETMODE)
-		local backhaul_5g_ap_iface=$(uci -q get misc.backhauls.backhaul_5g_ap_iface)
-		if [ -n "$netmode" ] && [ "$netmode" = "whc_re" ]; then
+		if [ -n $netmode ] && [ $netmode = "whc_re" ]; then
+			local backhaul_5g_ap_iface=$(uci -q get misc.backhauls.backhaul_5g_ap_iface)
 			if [ $ifname = $backhaul_5g_ap_iface ]; then
 				local hop_count=$(cat /var/run/topomon/hop_count 2>/dev/null)
 				#bring backhaul ap down on power up or hop > 1
 				#topomon will check hop status later
 				if [ -z $hop_count ] || [ $hop_count != "0" -a $hop_count != "1" ]; then
-					cfg80211tool "$ifname" mesh_aplimit 0
+					hostapd_cli -i $ifname -p /var/run/hostapd-$device disable
 				fi
-			fi
-		fi
-
-		local mesh_role=$(mesh_cmd role)
-		local ifname_5G=$(uci -q get misc.wireless.ifname_5G)
-		if [ -n "$mesh_role" ] && [ "CAP" = "$mesh_role" -o "RE" = "$mesh_role" ]; then
-			if [ "$ifname" = "$ifname_5G" -o "$ifname" = "$backhaul_5g_ap_iface" ]; then
-				wifitool "$ifname" block_acs_channel "149,153,157,161,165"
 			fi
 		fi
 
@@ -4374,7 +4352,7 @@ enable_vifs_qcawificfg80211() {
 	fi
 
 	local netmode=$(uci -q get xiaoqiang.common.NETMODE)
-	if [ -n "$netmode" ] && [ "$netmode" = "whc_re" ]; then
+	if [ -n $netmode ] && [ $netmode = "whc_re" ]; then
 		local backhaul_5g_sta_iface=$(uci -q get misc.backhauls.backhaul_5g_sta_iface)
 		if [ $ifname = $backhaul_5g_sta_iface ]; then
 			if [ $(cat /var/run/topomon/bh_type) = "wired" ]; then
@@ -5429,7 +5407,7 @@ config wifi-device  wifi$devidx
 	option macaddr	$(cat /sys/class/net/${dev}/address)
 	option hwmode	11${mode_11}
 	option htmode	'${htmode}'
-	option country	'US'
+	option country	'$country_code'
 	option disabled '$disable'
 	option txbf '3'
 	option ax '1'
@@ -5463,6 +5441,7 @@ EOF
 	fi
 	if [ $devidx = 1 ]; then
 		cat <<EOF
+	option channel_block_list '52,56,60,64'
 	option miwifi_mesh '1'
 EOF
 	fi
