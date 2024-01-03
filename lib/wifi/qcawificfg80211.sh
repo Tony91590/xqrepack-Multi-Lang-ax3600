@@ -4276,23 +4276,8 @@ enable_vifs_qcawificfg80211() {
 
 		handle_hmmc_add() {
 			local value="$1"
-			[ -n "$value" ] && wlanconfig "$ifname" hmmc add $value -cfg80211
-		}
-		config_list_foreach "$vif" hmmc_add handle_hmmc_add
-
-		# TXPower settings only work if device is up already
-		# while atheros hardware theoretically is capable of per-vif (even per-packet) txpower
-		# adjustment it does not work with the current atheros hal/madwifi driver
-		config_get vif_txpower "$vif" txpower
-
-		# use vif_txpower (from wifi-iface) instead of txpower (from wifi-device) if
-		# the latter doesn't exist
-		# for miwifi
-		if [ "$bdmode" = "24G" ]; then 
-			max_power=$(uci -q get misc.wireless.if_2g_maxpower)
-			if [ -z "$max_power" ]; then
-				max_power=30
-			fi
+if [ "$bdmode" = "24G" ]; then
+			max_power=30
 			case "$board_name" in
 			ap-mp*)
 				## IPQ5018 enable dynamic edcca
@@ -4307,9 +4292,7 @@ enable_vifs_qcawificfg80211() {
 			iwpriv "$ifname" vhtsubfee 0
 			iwpriv "$ifname" he_subfee 0
 		else
-			max_power=$(uci -q get misc.wireless.if_5g_maxpower)
-			if [ -z "$max_power" ]; then
-				max_power=30
+			max_power=30
 		fi
 		if [ "$bd_country_code" = "EU" ]; then
 			if [ "$bdmode" = "24G" ]; then
@@ -4325,12 +4308,6 @@ enable_vifs_qcawificfg80211() {
 				max_power=13
 			fi
 		fi
-
-		# if max power is xx.5 dBm, max_power = 2 * maxpower + 256
-		# plz make sure your driver support this special method.
-		float_flag=$(echo $max_power | grep ".5")
-		max_power="${max_power%%.*}"
-
 		config_get txpwr "$device" txpwr
 		if [ "$txpwr" = "mid" ]; then
 			txpower=`expr $max_power - 1`
@@ -4339,11 +4316,6 @@ enable_vifs_qcawificfg80211() {
 		else
 			txpower="$max_power"
 		fi
-
-		if [ "$float_flag" != "" ]; then
-			txpower=`expr $txpower \* 2 + 1 + 256`
-		fi
-
 		txpower="${txpower:-$vif_txpower}"
 		[ -z "$txpower" ] || iwconfig "$ifname" txpower "${txpower%%.*}"
 
