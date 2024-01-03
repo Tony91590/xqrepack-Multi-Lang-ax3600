@@ -4304,6 +4304,19 @@ enable_vifs_qcawificfg80211() {
 			iwpriv "$ifname" he_subfee 0
 		else
 			max_power=30
+		if [ "$bd_country_code" = "EU" ]; then
+			if [ "$bdmode" = "24G" ]; then
+				max_power=20
+			else
+				if [ "$channel" -ge 100 ]; then
+					max_power=24
+				else
+					max_power=23
+				fi
+			fi
+			if [ $ifname = "wl2" ]; then
+				max_power=13
+			fi
 		fi
 
 		config_get txpwr "$device" txpwr
