@@ -1734,6 +1734,7 @@ enable_qcawificfg80211() {
 	local hk_ol_num=0
 	local edge_ch_dep_applicable
 	local hwcaps
+	local bd_country_code=`bdata get CountryCode`
 	local board_name
 	[ -f /tmp/sysinfo/board_name ] && {
 		board_name=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print$2}')
@@ -5420,7 +5421,7 @@ config wifi-device  wifi$devidx
 	option macaddr	$(cat /sys/class/net/${dev}/address)
 	option hwmode	11${mode_11}
 	option htmode	'${htmode}'
-	option country	'$country_code'
+	option country	'US'
 	option disabled '$disable'
 	option txbf '3'
 	option ax '1'
@@ -5454,7 +5455,6 @@ EOF
 	fi
 	if [ $devidx = 1 ]; then
 		cat <<EOF
-	option channel_block_list '52,56,60,64'
 	option miwifi_mesh '1'
 EOF
 	fi
