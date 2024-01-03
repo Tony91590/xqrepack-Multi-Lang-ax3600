@@ -1734,6 +1734,7 @@ enable_qcawificfg80211() {
 	local hk_ol_num=0
 	local edge_ch_dep_applicable
 	local hwcaps
+	local bd_country_code=`bdata get CountryCode`
 	local board_name
 	[ -f /tmp/sysinfo/board_name ] && {
 		board_name=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print$2}')
@@ -4309,6 +4310,19 @@ enable_vifs_qcawificfg80211() {
 			max_power=$(uci -q get misc.wireless.if_5g_maxpower)
 			if [ -z "$max_power" ]; then
 				max_power=30
+		fi
+		if [ "$bd_country_code" = "EU" ]; then
+			if [ "$bdmode" = "24G" ]; then
+				max_power=20
+			else
+				if [ "$channel" -ge 100 ]; then
+					max_power=24
+				else
+					max_power=23
+				fi
+			fi
+			if [ $ifname = "wl2" ]; then
+				max_power=13
 			fi
 		fi
 
@@ -4360,7 +4374,7 @@ enable_vifs_qcawificfg80211() {
 		local ifname_5G=$(uci -q get misc.wireless.ifname_5G)
 		if [ -n "$mesh_role" ] && [ "CAP" = "$mesh_role" -o "RE" = "$mesh_role" ]; then
 			if [ "$ifname" = "$ifname_5G" -o "$ifname" = "$backhaul_5g_ap_iface" ]; then
-				wifitool "$ifname" block_acs_channel "52,56,60,64,149,153,157,161,165"
+				wifitool "$ifname" block_acs_channel "149,153,157,161,165"
 			fi
 		fi
 
@@ -5437,7 +5451,7 @@ config wifi-device  wifi$devidx
 	option macaddr	$(cat /sys/class/net/${dev}/address)
 	option hwmode	11${mode_11}
 	option htmode	'${htmode}'
-	option country	'$country_code'
+	option country	'US'
 	option disabled '$disable'
 	option txbf '3'
 	option ax '1'
@@ -5471,7 +5485,6 @@ EOF
 	fi
 	if [ $devidx = $((1-$devidx24g)) ]; then
 		cat <<EOF
-	option channel_block_list '52,56,60,64'
 	option miwifi_mesh '1'
 EOF
 	fi
