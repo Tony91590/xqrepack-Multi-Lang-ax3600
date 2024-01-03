@@ -4319,7 +4319,6 @@ enable_vifs_qcawificfg80211() {
 				max_power=13
 			fi
 		fi
-
 		config_get txpwr "$device" txpwr
 		if [ "$txpwr" = "mid" ]; then
 			txpower=`expr $max_power - 1`
@@ -5455,6 +5454,7 @@ EOF
 	fi
 	if [ $devidx = 1 ]; then
 		cat <<EOF
+        option channel_block_list '52,56,60,64'
 	option miwifi_mesh '1'
 EOF
 	fi
