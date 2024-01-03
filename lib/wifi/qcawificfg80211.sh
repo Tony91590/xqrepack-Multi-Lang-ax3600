@@ -4338,30 +4338,22 @@ enable_vifs_qcawificfg80211() {
 
 		#need to check router bind or not
 		if [ $ifname == "wl13" ] && [ $bindstatus == 0 -o $userswitch == 0 ];then
-			hostapd_cli -il13 -p /var/run/hostapd-$device disable
+			hostapd_cli -i wl13 -p /var/run/hostapd-$device disable
 		fi
 
 		local netmode=$(uci -q get xiaoqiang.common.NETMODE)
-		local backhaul_5g_ap_iface=$(uci -q get misc.backhauls.backhaul_5g_ap_iface)
-		if [ -n "$netmode" ] && [ "$netmode" = "whc_re" ]; then
+		if [ -n $netmode ] && [ $netmode = "whc_re" ]; then
+			local backhaul_5g_ap_iface=$(uci -q get misc.backhauls.backhaul_5g_ap_iface)
 			if [ $ifname = $backhaul_5g_ap_iface ]; then
 				local hop_count=$(cat /var/run/topomon/hop_count 2>/dev/null)
 				#bring backhaul ap down on power up or hop > 1
 				#topomon will check hop status later
 				if [ -z $hop_count ] || [ $hop_count != "0" -a $hop_count != "1" ]; then
-					cfg80211tool "$ifname" mesh_aplimit 0
+					hostapd_cli -i $ifname -p /var/run/hostapd-$device disable
 				fi
 			fi
 		fi
-
-		local mesh_role=$(mesh_cmd role)
-		local ifname_5G=$(uci -q get misc.wireless.ifname_5G)
-		if [ -n "$mesh_role" ] && [ "CAP" = "$mesh_role" -o "RE" = "$mesh_role" ]; then
-			if [ "$ifname" = "$ifname_5G" -o "$ifname" = "$backhaul_5g_ap_iface" ]; then
-				wifitool "$ifname" block_acs_channel "149,153,157,161,165"
-			fi
-		fi
-
+  
 		if [ ! -z "$vifs_name" ]; then
 			break
 		fi
@@ -4374,7 +4366,7 @@ enable_vifs_qcawificfg80211() {
 	fi
 
 	local netmode=$(uci -q get xiaoqiang.common.NETMODE)
-	if [ -n "$netmode" ] && [ "$netmode" = "whc_re" ]; then
+	if [ -n $netmode ] && [ $netmode = "whc_re" ]; then
 		local backhaul_5g_sta_iface=$(uci -q get misc.backhauls.backhaul_5g_sta_iface)
 		if [ $ifname = $backhaul_5g_sta_iface ]; then
 			if [ $(cat /var/run/topomon/bh_type) = "wired" ]; then
