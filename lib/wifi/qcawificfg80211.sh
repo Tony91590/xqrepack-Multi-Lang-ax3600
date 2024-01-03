@@ -735,8 +735,8 @@ function update_ini_for_hk_dbs()
 
 function update_ini_nss_info()
 {
-	[ -f /etc/wifi_nss_hk_olnum ] && { \
-		local hk_ol_num="$(cat /etc/wifi_nss_hk_olnum)"
+	[ -f /lib/wifi/wifi_nss_hk_olnum ] && { \
+		local hk_ol_num="$(cat /lib/wifi/wifi_nss_hk_olnum)"
 		if [ -e /sys/firmware/devicetree/base/MP_256 ]; then
 			update_internal_ini QCA8074V2_i.ini dp_nss_comp_ring_size 0x2000
 		elif [ -e /sys/firmware/devicetree/base/MP_512 ]; then
@@ -1056,11 +1056,11 @@ load_qcawificfg80211() {
 		if [ -n "$nss_wifi_nxthop_cfg" ]; then
 			update_ini_file nss_wifi_nxthop_cfg "$nss_wifi_nxthop_cfg"
 		fi
-	elif [ -f /etc/wifi_nss_olcfg ]; then
-		nss_wifi_olcfg="$(cat /etc/wifi_nss_olcfg)"
+	elif [ -f /lib/wifi/wifi_nss_olcfg ]; then
+		nss_wifi_olcfg="$(cat /lib/wifi/wifi_nss_olcfg)"
 
 		if [ $nss_wifi_olcfg != 0 ]; then
-			if [ -f /etc/wifi_nss_override ] && [ $(cat /etc/wifi_nss_override) = 1 ]; then
+			if [ -f /lib/wifi/wifi_nss_override ] && [ $(cat /lib/wifi/wifi_nss_override) = 1 ]; then
 				echo "NSS offload disabled due to unsupported config" >&2
 				update_ini_file nss_wifi_olcfg 0
 			else
@@ -1136,7 +1136,7 @@ load_qcawificfg80211() {
 		sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 0
 	elif [ "$mp_512" == "MP_512" ]; then
 		[ -d /sys/module/qca_ol ] || { \
-			hk_ol_num="$(cat /etc/wifi_nss_hk_olnum)"
+			hk_ol_num="$(cat /lib/wifi/wifi_nss_hk_olnum)"
 			if [ $hk_ol_num -eq 3 ]; then
 				#total pbuf size is 160 bytes,allocate memory for 19928 pbufs
 				sysctl_cmd dev.nss.n2hcfg.extra_pbuf_core0 3200000
@@ -1184,7 +1184,7 @@ load_qcawificfg80211() {
 		sysctl_cmd dev.nss.n2hcfg.n2h_wifi_pool_buf 4096
 	;;
 	ap-hk* | ap-oak*)
-		hk_ol_num="$(cat /etc/wifi_nss_hk_olnum)"
+		hk_ol_num="$(cat /lib/wifi/wifi_nss_hk_olnum)"
 		[ -d /sys/module/qca_ol ] || { \
 			if [ $hk_ol_num -eq 3 ]; then
 				#total pbuf size is 160 bytes,allocate memory for 93560 pbufs
@@ -1734,7 +1734,6 @@ enable_qcawificfg80211() {
 	local hk_ol_num=0
 	local edge_ch_dep_applicable
 	local hwcaps
-	local bd_country_code=`bdata get CountryCode`
 	local board_name
 	[ -f /tmp/sysinfo/board_name ] && {
 		board_name=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print$2}')
@@ -1745,14 +1744,14 @@ enable_qcawificfg80211() {
 	find_qcawifi_phy "$device" || return 1
 
 
-	if [ ! -f /etc/wifi_nss_override ]; then
-		if [ -f /etc/wifi_nss_olcfg ] && [ $(cat /etc/wifi_nss_olcfg) != 0 ]; then
-			touch /etc/wifi_nss_override
-			echo 0 > /etc/wifi_nss_override
+	if [ ! -f /lib/wifi/wifi_nss_override ]; then
+		if [ -f /lib/wifi/wifi_nss_olcfg ] && [ $(cat /lib/wifi/wifi_nss_olcfg) != 0 ]; then
+			touch /lib/wifi/wifi_nss_override
+			echo 0 > /lib/wifi/wifi_nss_override
 		fi
 	fi
 
-	if [ -f /etc/wifi_nss_override ]; then
+	if [ -f /lib/wifi/wifi_nss_override ]; then
 		cd /sys/class/net
 		for all_device in $(ls -d wifi* 2>&-); do
 			config_get_bool disabled "$all_device" disabled 0
@@ -1773,7 +1772,7 @@ enable_qcawificfg80211() {
 
 		# HK variants supports 3 radio sta configuration with fast lane enabled.
 		# NSS WiFi Offload needs to be enabled for HK when 3 sta configured.
-		nss_override="$(cat /etc/wifi_nss_override)"
+		nss_override="$(cat /lib/wifi/wifi_nss_override)"
 		if [ $num_radio_instamode = "4" ]; then
 			case "$board_name" in
 				ap-dk*| ap152 | ap147 | ap151 | ap135 | ap137 | ap161)
@@ -1783,7 +1782,7 @@ enable_qcawificfg80211() {
 					return 1
 				fi
 				if [ $nss_override = "0" ]; then
-					echo_cmd 1 /etc/wifi_nss_override
+					echo_cmd 1 /lib/wifi/wifi_nss_override
 					unload_qcawificfg80211
 					device=$1
 					load_qcawificfg80211
@@ -1794,7 +1793,7 @@ enable_qcawificfg80211() {
 			esac
 		else
 			if [ $nss_override != "0" ]; then
-				echo_cmd 0 /etc/wifi_nss_override
+				echo_cmd 0 /lib/wifi/wifi_nss_override
 				unload_qcawificfg80211
 				device=$1
 				load_qcawificfg80211
@@ -2358,8 +2357,8 @@ enable_qcawificfg80211() {
 
 	config_get nss_wifi_olcfg qcawifi nss_wifi_olcfg
 	if [ -z "$nss_wifi_olcfg" ]; then
-		if [ -f /etc/wifi_nss_olcfg ]; then
-			nss_wifi_olcfg="$(cat /etc/wifi_nss_olcfg)"
+		if [ -f /lib/wifi/wifi_nss_olcfg ]; then
+			nss_wifi_olcfg="$(cat /lib/wifi/wifi_nss_olcfg)"
 		fi
 	fi
 
@@ -2367,7 +2366,7 @@ enable_qcawificfg80211() {
 		local mp_256="$(ls /proc/device-tree/ | grep -rw "MP_256")"
 		local mp_512="$(ls /proc/device-tree/ | grep -rw "MP_512")"
 		config_get hwmode "$device" hwmode auto
-		hk_ol_num="$(cat /etc/wifi_nss_hk_olnum)"
+		hk_ol_num="$(cat /lib/wifi/wifi_nss_hk_olnum)"
 		#For 256 memory profile the range is preset in fw
 		if [ "$mp_256" == "MP_256" ]; then
 			:
@@ -4288,8 +4287,11 @@ enable_vifs_qcawificfg80211() {
 		# use vif_txpower (from wifi-iface) instead of txpower (from wifi-device) if
 		# the latter doesn't exist
 		# for miwifi
-		if [ "$bdmode" = "24G" ]; then
-			max_power=30
+		if [ "$bdmode" = "24G" ]; then 
+			max_power=$(uci -q get misc.wireless.if_2g_maxpower)
+			if [ -z "$max_power" ]; then
+				max_power=30
+			fi
 			case "$board_name" in
 			ap-mp*)
 				## IPQ5018 enable dynamic edcca
@@ -4304,22 +4306,17 @@ enable_vifs_qcawificfg80211() {
 			iwpriv "$ifname" vhtsubfee 0
 			iwpriv "$ifname" he_subfee 0
 		else
-			max_power=30
-		fi
-		if [ "$bd_country_code" = "EU" ]; then
-			if [ "$bdmode" = "24G" ]; then
-				max_power=20
-			else
-				if [ "$channel" -ge 100 ]; then
-					max_power=24
-				else
-					max_power=23
-				fi
-			fi
-			if [ $ifname = "wl2" ]; then
-				max_power=13
+			max_power=$(uci -q get misc.wireless.if_5g_maxpower)
+			if [ -z "$max_power" ]; then
+				max_power=30
 			fi
 		fi
+
+		# if max power is xx.5 dBm, max_power = 2 * maxpower + 256
+		# plz make sure your driver support this special method.
+		float_flag=$(echo $max_power | grep ".5")
+		max_power="${max_power%%.*}"
+
 		config_get txpwr "$device" txpwr
 		if [ "$txpwr" = "mid" ]; then
 			txpower=`expr $max_power - 1`
@@ -4328,6 +4325,11 @@ enable_vifs_qcawificfg80211() {
 		else
 			txpower="$max_power"
 		fi
+
+		if [ "$float_flag" != "" ]; then
+			txpower=`expr $txpower \* 2 + 1 + 256`
+		fi
+
 		txpower="${txpower:-$vif_txpower}"
 		[ -z "$txpower" ] || iwconfig "$ifname" txpower "${txpower%%.*}"
 
@@ -4338,7 +4340,7 @@ enable_vifs_qcawificfg80211() {
 
 		#need to check router bind or not
 		if [ $ifname == "wl13" ] && [ $bindstatus == 0 -o $userswitch == 0 ];then
-			hostapd_cli -il13 -p /var/run/hostapd-$device disable
+			hostapd_cli -i wl13 -p /var/run/hostapd-$device disable
 		fi
 
 		local netmode=$(uci -q get xiaoqiang.common.NETMODE)
@@ -4358,7 +4360,7 @@ enable_vifs_qcawificfg80211() {
 		local ifname_5G=$(uci -q get misc.wireless.ifname_5G)
 		if [ -n "$mesh_role" ] && [ "CAP" = "$mesh_role" -o "RE" = "$mesh_role" ]; then
 			if [ "$ifname" = "$ifname_5G" -o "$ifname" = "$backhaul_5g_ap_iface" ]; then
-				wifitool "$ifname" block_acs_channel "149,153,157,161,165"
+				wifitool "$ifname" block_acs_channel "52,56,60,64,149,153,157,161,165"
 			fi
 		fi
 
@@ -4677,7 +4679,7 @@ post_qcawificfg80211() {
 						[ ! -f /etc/init.d/lbd ] || /etc/init.d/lbd start
 					}
 			else
-				[ ! -f /etc/init.d/miwifi-roam ] || /etc/init.d/miwifi-roam start
+				[ ! -f /etc/init.d/miwifi-roam ] || /etc/init.d/miwifi-roam restart
 				[ ! -f /usr/sbin/topomon_action.sh ] || /usr/sbin/topomon_action.sh update_mesh_param
 				[ ! -f /etc/init.d/miwifi-discovery ] || /etc/init.d/miwifi-discovery start
 				[ ! -f /etc/init.d/topomon ] || /etc/init.d/topomon restart
@@ -5310,6 +5312,7 @@ detect_qcawificfg80211() {
 	done
 
 	[ -d wifi0 ] || return
+	last_devidx=$(ls -d wifi* | awk 'END {print}' | tr -cd "[0-9]")
 	for dev in $(ls -d wifi* 2>&-); do
 		found=0
 		config_foreach check_qcawifi_device wifi-device
@@ -5377,15 +5380,20 @@ detect_qcawificfg80211() {
 		reload=1
 		fi
 
-	devidx24g=0
+        local wifi_iface2G="`uci -q get misc.wireless.if_2G`"
+	if [ "$wifi_iface2G" = "wifi0" ];then
+		devidx24g=0
+	else
+		devidx24g=1
+	fi
 	radioidx=$devidx
-	if [ $devidx = 0 ]; then
+	if [ $devidx = $devidx24g ]; then
 		htmode=HT40
 		mode=ap
 		network=lan
 		radioidx=1
 		disable=0
-	elif [ $devidx = 1 ]; then
+	elif [ $devidx = $((1-$devidx24g)) ]; then
 		htmode=HT80
 		mode=ap
 		network=lan
@@ -5399,7 +5407,7 @@ detect_qcawificfg80211() {
 		disable=0
 	fi
 	ssid=`nvram get wl${radioidx}_ssid`
-	country_code=`bdata get CountryCode`
+	country_code=`get_bdata_country`
 
 	[ -z "${ssid}" ] && ssid="test"
 		case "$board_name" in
@@ -5407,18 +5415,18 @@ detect_qcawificfg80211() {
 			;;
 		ap-hk*|ap-ac*|ap-oa*|ap-cp*|ap-mp*)
 			if [ -f /etc/rc.d/*qca-nss-ecm ]; then
-				echo_cmd $nss_olcfg /etc/wifi_nss_olcfg
-				echo_cmd $nss_ol_num /etc/wifi_nss_olnum
-				echo_cmd "$(($olcfg_axa + $olcfg_axg))" /etc/wifi_nss_hk_olnum
+				echo_cmd $nss_olcfg /lib/wifi/wifi_nss_olcfg
+				echo_cmd $nss_ol_num /lib/wifi/wifi_nss_olnum
+				echo_cmd "$(($olcfg_axa + $olcfg_axg))" /lib/wifi/wifi_nss_hk_olnum
 			else
-				echo_cmd 0 /etc/wifi/wifi_nss_olcfg
-				echo_cmd $nss_ol_num /etc/wifi_nss_olnum
-				echo_cmd "$(($olcfg_axa + $olcfg_axg))" /etc/wifi_nss_hk_olnum
+				echo_cmd 0 /lib/wifi/wifi_nss_olcfg
+				echo_cmd $nss_ol_num /lib/wifi/wifi_nss_olnum
+				echo_cmd "$(($olcfg_axa + $olcfg_axg))" /lib/wifi/wifi_nss_hk_olnum
 			fi
 			;;
 		*)
-			echo_cmd $nss_olcfg /etc/wifi_nss_olcfg
-			echo_cmd $nss_ol_num /etc/wifi_nss_olnum
+			echo_cmd $nss_olcfg /lib/wifi/wifi_nss_olcfg
+			echo_cmd $nss_ol_num /lib/wifi/wifi_nss_olnum
 			;;
 		esac
 		sync
@@ -5429,7 +5437,7 @@ config wifi-device  wifi$devidx
 	option macaddr	$(cat /sys/class/net/${dev}/address)
 	option hwmode	11${mode_11}
 	option htmode	'${htmode}'
-	option country	'US'
+	option country	'$country_code'
 	option disabled '$disable'
 	option txbf '3'
 	option ax '1'
@@ -5439,7 +5447,7 @@ EOF
 	option bw 20
 EOF
 	fi
-	if [ $devidx = 1 ]; then
+	if [ $devidx = $((1-$devidx24g)) ]; then
 		cat <<EOF
 	option bw 80
 EOF
@@ -5456,17 +5464,18 @@ config wifi-iface
 	option wpsdevicename 'XiaoMiRouter'
 	option he_ul_ofdma '0'
 EOF
-	if [ $devidx = 0 ]; then
+	if [ $devidx = $devidx24g ]; then
 		cat <<EOF
 	option amsdu '2'
 EOF
 	fi
-	if [ $devidx = 1 ]; then
+	if [ $devidx = $((1-$devidx24g)) ]; then
 		cat <<EOF
+	option channel_block_list '52,56,60,64'
 	option miwifi_mesh '1'
 EOF
 	fi
-	if [ $devidx = 2 ]; then
+	if [ $devidx = $last_devidx ]; then
 		cat <<EOF
 config wifi-iface 'miot_2G'
 	option ifname 'wl13'
@@ -5503,6 +5512,12 @@ EOF
 
 # Handle traps here
 trap_qcawifi() {
+	# Release any locks taken
+	lock -u /var/run/wifilock
+}
+
+# Handle traps here
+trap_qcawificfg80211() {
 	# Release any locks taken
 	lock -u /var/run/wifilock
 }
