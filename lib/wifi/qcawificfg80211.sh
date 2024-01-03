@@ -4276,7 +4276,19 @@ enable_vifs_qcawificfg80211() {
 
 		handle_hmmc_add() {
 			local value="$1"
-if [ "$bdmode" = "24G" ]; then
+			[ -n "$value" ] && wlanconfig "$ifname" hmmc add $value -cfg80211
+		}
+		config_list_foreach "$vif" hmmc_add handle_hmmc_add
+
+		# TXPower settings only work if device is up already
+		# while atheros hardware theoretically is capable of per-vif (even per-packet) txpower
+		# adjustment it does not work with the current atheros hal/madwifi driver
+		config_get vif_txpower "$vif" txpower
+
+		# use vif_txpower (from wifi-iface) instead of txpower (from wifi-device) if
+		# the latter doesn't exist
+		# for miwifi
+		if [ "$bdmode" = "24G" ]; then
 			max_power=30
 			case "$board_name" in
 			ap-mp*)
