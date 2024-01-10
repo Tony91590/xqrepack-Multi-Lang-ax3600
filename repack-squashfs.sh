@@ -98,18 +98,17 @@ done
 # as a last-ditch effort, change the *.miwifi.com hostnames to localhost
 sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
-# apply patch from xqrepack repository
-find patches -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
-find patches -type f -name \*.orig -delete
-
-rm -f $FSDIR/etc/config/xqled.orig
-
 cp -R lib/* "$FSDIR/lib/"
 
 sed -i 's/149/132/' "$FSDIR/usr/lib/lua/luci/view/web/setting/wifi.htm"
 sed -i 's/149/132/' "$FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm"
 sed -i 's/149/132/' "$FSDIR/usr/lib/lua/luci/view/web/inc/wifi.html"
 
+# apply patch from xqrepack repository
+find patches -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
+find patches -type f -name \*.orig -delete
+
+rm -f $FSDIR/etc/config/xqled.orig
 
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
