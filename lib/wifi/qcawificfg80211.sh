@@ -4308,16 +4308,16 @@ enable_vifs_qcawificfg80211() {
 		fi
 		if [ "$bd_country_code" = "EU" ]; then
 			if [ "$bdmode" = "24G" ]; then
-				max_power=20
+				max_power=30
 			else
 				if [ "$channel" -ge 100 ]; then
-					max_power=24
+					max_power=30
 				else
-					max_power=23
+					max_power=30
 				fi
 			fi
-			if [ $ifname = "wl2" ]; then
-				max_power=13
+			if [ $ifname = "wl0" ]; then
+				wifitool "wl0" block_acs_channel "100,104,108,112,116,120,124,128,132,136,140,144,165"
 			fi
 		fi
 		config_get txpwr "$device" txpwr
@@ -5421,7 +5421,7 @@ config wifi-device  wifi$devidx
 	option macaddr	$(cat /sys/class/net/${dev}/address)
 	option hwmode	11${mode_11}
 	option htmode	'${htmode}'
-	option country	'US'
+	option country	'FR'
 	option disabled '$disable'
 	option txbf '3'
 	option ax '1'
@@ -5455,6 +5455,7 @@ EOF
 	fi
 	if [ $devidx = 1 ]; then
 		cat <<EOF
+        option channel_block_list '100,104,108,112,116,120,124,128,132,136,140,144,165'
 	option miwifi_mesh '1'
 EOF
 	fi
