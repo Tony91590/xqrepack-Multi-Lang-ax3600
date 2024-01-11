@@ -4340,6 +4340,11 @@ enable_vifs_qcawificfg80211() {
 			fi
 		fi
 
+         	local ifname_5G=$(uci -q get misc.wireless.ifname_5G)
+         	if [ "$ifname" = "$ifname_5G" -o "$ifname" = "$backhaul_5g_ap_iface" ]; then
+		        wifitool "$ifname" block_acs_channel "100,104,108,112,116,120,124,128,132,136,140,144,165"
+	        fi
+
 		if [ ! -z "$vifs_name" ]; then
 			break
 		fi
@@ -4361,9 +4366,7 @@ enable_vifs_qcawificfg80211() {
 		fi
 	fi
 }
-
-
-
+ 
 setup_wps_enhc_device() {
 	local device=$1
 	local wps_enhc_cfg=
