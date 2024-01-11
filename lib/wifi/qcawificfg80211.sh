@@ -5441,6 +5441,7 @@ EOF
 	fi
 	if [ $devidx = 1 ]; then
 		cat <<EOF
+        option channel_block_list '100,104,108,112,116,120,124,128,132,136,140,144,165'
 	option miwifi_mesh '1'
 EOF
 	fi
