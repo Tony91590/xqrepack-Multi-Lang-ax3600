@@ -1734,7 +1734,6 @@ enable_qcawificfg80211() {
 	local hk_ol_num=0
 	local edge_ch_dep_applicable
 	local hwcaps
-	local bd_country_code=`bdata get CountryCode`
 	local board_name
 	[ -f /tmp/sysinfo/board_name ] && {
 		board_name=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print$2}')
@@ -4306,20 +4305,7 @@ enable_vifs_qcawificfg80211() {
 		else
 			max_power=30
 		fi
-		if [ "$bd_country_code" = "EU" ]; then
-			if [ "$bdmode" = "24G" ]; then
-				max_power=30
-			else
-				if [ "$channel" -ge 100 ]; then
-					max_power=30
-				else
-					max_power=30
-				fi
-			fi
-			if [ $ifname = "wl0" ]; then
-				wifitool "wl0" block_acs_channel "100,104,108,112,116,120,124,128,132,136,140,144,165"
-			fi
-		fi
+
 		config_get txpwr "$device" txpwr
 		if [ "$txpwr" = "mid" ]; then
 			txpower=`expr $max_power - 1`
@@ -4353,7 +4339,7 @@ enable_vifs_qcawificfg80211() {
 				fi
 			fi
 		fi
-  
+
 		if [ ! -z "$vifs_name" ]; then
 			break
 		fi
