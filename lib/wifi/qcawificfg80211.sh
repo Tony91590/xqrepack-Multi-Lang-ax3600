@@ -4318,7 +4318,17 @@ enable_vifs_qcawificfg80211() {
 		max_power="${max_power%%.*}"
 
 		config_get txpwr "$device" txpwr
-		if [ "$txpwr" = "mid" ]; then
+		# If you return to stock FW from this patched FW, $max_power setting will be used by default
+		txpwr_is_set_in_dbm=0
+		case "$txpwr" in
+			dbm*)
+				txpwr_is_set_in_dbm=1
+				;;
+		esac
+		# This means that you can set exact TX power in dBm with POST request to http://192.168.31.1/cgi-bin/luci/;stok=<STOK>/api/xqnetwork/set_wifi
+		if [ $txpwr_is_set_in_dbm == 1 ]; then
+			txpower="${txpwr#dbm}"
+		elif [ "$txpwr" = "mid" ]; then
 			txpower=`expr $max_power - 1`
 		elif [ "$txpwr" = "min" ]; then
 			txpower=`expr $max_power - 3`
@@ -4507,18 +4517,18 @@ set_hw_mode_for_dynamic_mode_switch() {
 
 	[ $cnt -ne 0 ] && sleep 1
 	# Check if DFS CAC is running and if then, wait until the completition
-	# (max CAC timeout 60 secs)
-	cnt=60
-	while [ $cnt -le 60 ]; do
+	# (max CAC timeout 600 secs)
+	cnt=0
+	while [ $cnt -le 600 ]; do
 		cac_state=`cfg80211tool $primary_if get_cac_state \
 			| awk -F  ':' '{print $2}'`
-		[ $cnt -le 60 ] && break
+		[ $cac_state -eq 0 ] && break
 		sleep 1
-		cnt=60
+		cnt=$((cnt + 1))
 	done
-	[ $cnt -le 60 ] && return
+	[ $cac_state -ne 0 ] && return
 
-	[ $cnt -le 60 ] && sleep 1
+	[ $cnt -ne 0 ] && sleep 1
 	$device_if $primary_dev hw_mode $new_hw_mode
 }
 
@@ -5437,7 +5447,7 @@ config wifi-device  wifi$devidx
 	option macaddr	$(cat /sys/class/net/${dev}/address)
 	option hwmode	11${mode_11}
 	option htmode	'${htmode}'
-	option country	'FR'
+	option country	'$country_code'
 	option disabled '$disable'
 	option txbf '3'
 	option ax '1'
