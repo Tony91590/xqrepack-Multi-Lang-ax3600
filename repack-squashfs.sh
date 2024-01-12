@@ -37,40 +37,6 @@ sed -i 's/flg_ssh=.*/flg_ssh=1/' "/etc/init.d/dropbear"
 sed -i '/set_user(/a return 0' "/etc/init.d/system"
 sed -i 's/flg_init_pwd=.*/flg_init_pwd=0/' "/etc/init.d/boot_check"
 
-
-# stop phone-home in web UI
-cat <<JS >> "/www/js/miwifi-monitor.js"
-(function(){ if (typeof window.MIWIFI_MONITOR !== "undefined") window.MIWIFI_MONITOR.log = function(a,b) {}; })();
-JS
-
-
-
-# dont start crap services
-for SVC in stat_points statisticsservice \
-		datacenter \
-		smartcontroller \
-		plugincenter plugin_start_script.sh cp_preinstall_plugins.sh; do
-	rm -f /etc/rc.d/[SK]*$SVC
-done
-
-# prevent stats phone home & auto-update
-for f in StatPoints mtd_crash_log logupload.lua otapredownload wanip_check.sh; do > /usr/sbin/$f; done
-
-rm -f /etc/hotplug.d/iface/*wanip_check
-
-for f in wan_check messagingagent.sh; do
-	sed -i '/start_service(/a return 0' /etc/init.d/$f
-done
-
-# cron jobs are mostly non-OpenWRT stuff
-for f in /etc/crontabs/*; do
-	sed -i 's/^/#/' $f
-done
-
-# as a last-ditch effort, change the *.miwifi.com hostnames to localhost
-sed -i 's@\w\+.miwifi.com@localhost@g' /etc/config/miwifi
-
-
 >&2 echo "repacking squashfs..."
 rm -f "$IMG.new"
 mksquashfs "$FSDIR" "$IMG.new" -comp xz -b 256K -no-xattrs
