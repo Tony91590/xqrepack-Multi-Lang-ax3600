@@ -43,7 +43,7 @@ sed -i "s@root:[^:]*@root:${ROOTPW}@" "$FSDIR/etc/shadow"
 sed -i '/set_user(/a return 0' "$FSDIR/etc/init.d/system"
 sed -i 's/flg_init_pwd=.*/flg_init_pwd=0/' "$FSDIR/etc/init.d/boot_check"
 
-cp -R lib/* "$FSDIR/lib/"
+#cp -R lib/* "$FSDIR/lib/"
 
 #sed -i 's/149/132/' "$FSDIR/usr/lib/lua/luci/view/web/setting/wifi.htm"
 #sed -i 's/149/132/' "$FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm"
