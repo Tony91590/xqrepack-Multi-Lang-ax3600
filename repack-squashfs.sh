@@ -102,16 +102,11 @@ sed -i 's@\w\+.miwifi.com@localhost@g' $FSDIR/etc/config/miwifi
 
 cp -R lib/* "$FSDIR/lib/"
 
-#sed -i 's/149/132/' "$FSDIR/usr/lib/lua/luci/view/web/setting/wifi.htm"
-#sed -i 's/149/132/' "$FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm"
-#sed -i 's/149/132/' "$FSDIR/usr/lib/lua/luci/view/web/inc/wifi.html"
-
 # apply patch from xqrepack repository
 find patches -type f -exec bash -c "(cd "$FSDIR" && patch -p1) < {}" \;
 find patches -type f -name \*.orig -delete
 
 rm -f $FSDIR/etc/config/xqled.orig
-rm -f $FSDIR/lib/wifi/qcawificfg80211.sh.orig
 rm -f $FSDIR/usr/lib/lua/luci/view/web/apsetting/wifi.htm.orig
 rm -f $FSDIR/usr/lib/lua/luci/view/web/inc/wifi.html.orig
 rm -f $FSDIR/usr/lib/lua/luci/view/web/setting/wifi.htm.orig
