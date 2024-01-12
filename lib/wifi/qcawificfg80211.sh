@@ -4508,17 +4508,17 @@ set_hw_mode_for_dynamic_mode_switch() {
 	[ $cnt -ne 0 ] && sleep 1
 	# Check if DFS CAC is running and if then, wait until the completition
 	# (max CAC timeout 60 secs)
-	cnt=0
+	cnt=60
 	while [ $cnt -le 60 ]; do
 		cac_state=`cfg80211tool $primary_if get_cac_state \
 			| awk -F  ':' '{print $2}'`
-		[ $cac_state -eq 0 ] && break
+		[ $cnt -le 60 ] && break
 		sleep 1
-		cnt=$((cnt + 1))
+		cnt=60
 	done
-	[ $cac_state -ne 0 ] && return
+	[ $cnt -le 60 ] && return
 
-	[ $cnt -ne 0 ] && sleep 1
+	[ $cnt -le 60 ] && sleep 1
 	$device_if $primary_dev hw_mode $new_hw_mode
 }
 
