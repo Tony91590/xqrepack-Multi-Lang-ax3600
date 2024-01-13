@@ -555,6 +555,8 @@ hostapd_set_bss_options() {
 		config_get device_type "$vif" wps_device_type "6-0050F204-1"
 		config_get device_name "$vif" wps_device_name "XiaoMiRouter"
 		# for miwifi
+                config_get country_code "$vif" country_code "FR"
+		config_get ieee80211d "$vif" ieee80211d "1"
 		config_get device_name "$vif" wpsdevicename "XiaoMiRouter"
 		config_get manufacturer "$vif" wps_manufacturer "xiaomi"
 		config_get model_name "$vif" model_name "$hardware"
