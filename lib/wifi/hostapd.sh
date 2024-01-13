@@ -119,11 +119,11 @@ hostapd_prepare_device_config() {
 
         hostapd_set_log_options base_cfg
 
-        set_default country_ie 1
+        set_default country_ie 0
         set_default doth 1
 
         [ -n "$country" ] && {
-                append base_cfg "country_code=$country" "$N"
+                append base_cfg "country_code=FR" "$N"
 
                 [ "$country_ie" -gt 0 ] && append base_cfg "ieee80211d=1" "$N"
                 [ "$hwmode" = "a" -a "$doth" -gt 0 ] && append base_cfg "ieee80211h=1" "$N"
@@ -555,8 +555,6 @@ hostapd_set_bss_options() {
 		config_get device_type "$vif" wps_device_type "6-0050F204-1"
 		config_get device_name "$vif" wps_device_name "XiaoMiRouter"
 		# for miwifi
-                config_get country_code "$vif" country_code "FR"
-		config_get ieee80211d "$vif" ieee80211d "1"
 		config_get device_name "$vif" wpsdevicename "XiaoMiRouter"
 		config_get manufacturer "$vif" wps_manufacturer "xiaomi"
 		config_get model_name "$vif" model_name "$hardware"
