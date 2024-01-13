@@ -119,15 +119,14 @@ hostapd_prepare_device_config() {
 
         hostapd_set_log_options base_cfg
 
-        set_default country_ie 0
+        set_default country_ie 1
         set_default doth 1
 
-        [ -n "$country" ] && {
-                append base_cfg "country_code=FR" "$N"
-
-                [ "$country_ie" -gt 0 ] && append base_cfg "ieee80211d=1" "$N"
-                [ "$hwmode" = "a" -a "$doth" -gt 0 ] && append base_cfg "ieee80211h=1" "$N"
-        }
+        
+        append base_cfg "country_code=FR" "$N"
+        append base_cfg "ieee80211d=1" "$N"
+		
+        [ "$hwmode" = "a" -a "$doth" -gt 0 ] && append base_cfg "ieee80211h=1" "$N"
         [ -n "$hwmode" ] && append base_cfg "hw_mode=$hwmode" "$N"
 
         local brlist= br
