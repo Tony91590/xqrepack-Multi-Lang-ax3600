@@ -5407,7 +5407,7 @@ config wifi-device  wifi$devidx
 	option macaddr	$(cat /sys/class/net/${dev}/address)
 	option hwmode	11${mode_11}
 	option htmode	'${htmode}'
-	option country	'FR'
+	option country	'CN'
 	option disabled '$disable'
 	option txbf '3'
 	option ax '1'
