@@ -5,7 +5,7 @@
  	option hwmode	11${mode_11}
  	option htmode	'${htmode}'
 -	option country	'$country_code'
-+	option country	'DE'
++	option country	'FR'
  	option disabled '$disable'
  	option txbf '3'
  	option ax '1'
